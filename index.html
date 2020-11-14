@@ -1,0 +1,67 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/index.css">
+  <title>日本GO</title>
+</head>
+
+<body>
+
+    <!-- Home Page Title -->
+    <div class="container-fluid" style="height: 100px" id="index-header">
+        <img src="images/logo1.JPG" class="nav-button nav-home" alt="Logo" width="auto" height="100%">
+        <img src="images/logo2.JPG" class="nav-button nav-home" alt="Logo" width="auto" height="80%">
+        <img src="icons/user.svg" class="nav-button float-right" alt="User Icon" width="auto" height="60%" style="margin-top: 20px;">
+    </div>
+
+    <!-- Content -->
+    <div class="container-fluid">
+        <div class="d-flex justify-content-center" style="margin-top: 50px">
+            <label id="home-label">Home Page</label
+        ></div>
+        <div class="d-flex justify-content-center" style="margin-top: 50px">
+            <div class="d-flex flex-column justify-content-center home-main-button">
+                <img src="icons/meeting.svg" alt="Meeting" width="200px" height="auto">
+                <label class="home-main-button-label">Join/Host Meeting</label>
+            </div>
+            <div class="d-flex flex-column justify-content-center home-main-button">
+                <img src="icons/document.svg" alt="Meeting" width="200px" height="auto">
+                <label class="home-main-button-label">Saved Transcripts</label>
+            </div>
+            <div class="d-flex flex-column justify-content-center home-main-button">
+                <img src="icons/big-dictionary.svg" alt="Meeting" width="200px" height="auto">
+                <label class="home-main-button-label">Saved Vocabulary</label>
+            </div>
+        </div>
+        <div id="test" >Test</div>
+    </div>
+     
+    <!-- JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="/js/microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
+    <script src="/js/main.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('.nav-home').click(function() {
+                window.location.href = "index.html";
+            });
+            $('#test').click(function() {
+                fromMic();
+            });
+        });
+    </script>
+
+</body>
+</html>
