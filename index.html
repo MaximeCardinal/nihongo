@@ -18,7 +18,7 @@
     <div class="container-fluid" style="height: 100px" id="index-header">
         <img src="images/logo1.JPG" class="nav-button nav-home" alt="Logo" width="auto" height="100%">
         <img src="images/logo2.JPG" class="nav-button nav-home" alt="Logo" width="auto" height="80%">
-        <img src="icons/user.svg" class="nav-button float-right" alt="User Icon" width="auto" height="60%" style="margin-top: 20px;">
+        <img src="icons/user.svg" class="nav-button float-right" alt="User Icon" width="auto" height="60%" style="margin-top: 20px;" id="user-setting-button">
     </div>
 
     <!-- Content -->
@@ -27,15 +27,15 @@
             <label id="home-label">Home Page</label
         ></div>
         <div class="d-flex justify-content-center" style="margin-top: 50px">
-            <div class="d-flex flex-column justify-content-center home-main-button">
+            <div class="d-flex flex-column justify-content-center home-main-button" id="join-meeting-button">
                 <img src="icons/meeting.svg" alt="Meeting" width="200px" height="auto">
                 <label class="home-main-button-label">Join/Host Meeting</label>
             </div>
-            <div class="d-flex flex-column justify-content-center home-main-button">
+            <div class="d-flex flex-column justify-content-center home-main-button" id="saved-trans-button">
                 <img src="icons/document.svg" alt="Meeting" width="200px" height="auto">
                 <label class="home-main-button-label">Saved Transcripts</label>
             </div>
-            <div class="d-flex flex-column justify-content-center home-main-button">
+            <div class="d-flex flex-column justify-content-center home-main-button" id="saved-vocab-button">
                 <img src="icons/big-dictionary.svg" alt="Meeting" width="200px" height="auto">
                 <label class="home-main-button-label">Saved Vocabulary</label>
             </div>
@@ -60,7 +60,36 @@
             $('#test').click(function() {
                 fromMic();
             });
+
+            // Main buttons
+            $('#join-meeting-button').click(function() {
+                alert("");
+            });
+            $('#saved-trans-button').click(function() {
+                alert("");
+            });
+            $('#saved-vocab-button').click(function() {
+                alert("The 'Saved Vocabulary' functionality was not implemented as it is out of the scope of this project, but still displayed to get a picture of what the full implemented system would offer.");
+            });
+            $(".home-main-button").hover(
+                function(){
+                    $(this).css({"background-color": "#989898", "cursor": "pointer"});
+                }, function(){
+                    $(this).css({"background-color": "white", "cursor": "default"});
+            });
+
+            // User settings button
+            $('#user-setting-button').click(function() {
+                alert("The 'User Settings' functionality was not implemented as it is out of the scope of this project, but still displayed to get a picture of what the full implemented system would offer.");
+            });
+            $("#user-setting-button").hover(
+                function(){
+                    $(this).css({"fill": "#989898", "cursor": "pointer"});
+                }, function(){
+                    $(this).css({"fill": "white", "cursor": "default"});
+            });
         });
+            
     </script>
 
 </body>

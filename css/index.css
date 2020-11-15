@@ -8,10 +8,6 @@
     margin: 20px 0px 0px 0px;
 }
 
-.nav-button:hover, .home-main-button:hover {
-    cursor: pointer;
-}
-
 .home-main-button {
     width: 250px;
     margin-left: 20px;
@@ -19,6 +15,9 @@
     padding: 20px 20px 0px 20px;
     border: solid 5px black;
     border-radius: 20%;
+    transition: background 0.3s linear;
+    -webkit-transition: background 0.3s linear;
+    -moz-transition: background 0.3s linear;
 }
 
 .home-main-button-label {
