@@ -1,18 +1,18 @@
 const speechConfig = SpeechSDK.SpeechConfig.fromSubscription("e7868a10ab944f1f9ca2edf5737c2c95", "westus");
 speechConfig.speechRecognitionLanguage = "ja-JP";
 speechConfig.speechSynthesisLanguage = "ja-JP";
+speechConfig.speechSynthesisVoiceName = "ja-JP-HarukaRUS";
 
 var toggle = 0;
 
-function fromMic() {
+function azureSpeechToText() {
     let audioConfig = SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
     let recognizer = new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
     
     console.log('Speak into your microphone.');
     recognizer.recognizeOnceAsync(result => {
         console.log(`RECOGNIZED: Text=${result.text}`);
-        synthesizeSpeech(result.text);
-        // Create message instance (with interactions)
+        transcriptionReceived(result.text);
     });
 }
 

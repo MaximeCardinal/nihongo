@@ -72,15 +72,18 @@
             <div id='transcriptText' class="d-flex scroll addBorder" style="width: 75%">
                 <table>
                     <tbody>
-                        <tr v-for="(item, index) in messages">
-                            <td>{{ item.timestamp }}</td>
-                            <td>{{ item.name }} ({{ item.role }}) :</td>
-                            <td>{{ item.content }}</td>
+                        <tr v-for="(item, index) in messages" class="transcript-message-row">
                             <td>
-                                <img :id="'narrate-' + index" src="../icons/meeting.svg" alt="Narrate" width="20px" height="auto" onclick="narrateMessage(this.id)">
-                                <img :id="'translate-' + index" src="../icons/meeting.svg" alt="Translate" width="20px" height="auto" onclick="translateMessage(this.id)">
-                                <img :id="'share-' + index" src="../icons/meeting.svg" alt="Share" width="20px" height="auto" onclick="shareMessage(this.id)">
+                                <label class="transcript-message-name">{{ item.name }}</label> 
+                                <label class="transcript-message-role">({{ item.role }})</label> :
                             </td>
+                            <td class="transcript-message-content">{{ item.content }}</td>
+                            <td class="transcript-message-buttons-container">
+                                <img :id="'narrate-' + index" class="transcript-message-buttons" src="../icons/volume-up.svg" alt="Narrate" width="20px" height="auto" onclick="narrateMessage(this.id)">
+                                <img :id="'translate-' + index" class="transcript-message-buttons" src="../icons/language.svg" alt="Translate" width="30px" height="auto" onclick="translateMessage(this.id)">
+                                <img :id="'share-' + index" class="transcript-message-buttons" src="../icons/share-square.svg" alt="Share" width="20px" height="auto" onclick="shareMessage(this.id)">
+                            </td>
+                            <td class="transcript-message-time">{{ item.timestamp.getHours() }}:{{ item.timestamp.getMinutes() }}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -88,13 +91,13 @@
             <!-- Need to center the buttons wrt the width -->
             <div id='transcriptButtons' class="d-flex flex-column justify-content-center addBorder" style="width: 25%" >
                 <div class="d-flex justify-content-center">
+                    <button id='recordVocalButton' class="transcript-buttons" style="margin-top: 20px">Record Vocal Message</button>
+                </div>
+                <div class="d-flex justify-content-center">
                     <button id='speechButton' class="transcript-buttons">Speech Bubbles</button>
                 </div>
                 <div class="d-flex justify-content-center">
                     <button id='openTranscriptButton' class="transcript-buttons" style="margin-top: 20px">Open Saved Transcripts</button>
-                </div>
-                <div class="d-flex justify-content-center">
-                    <button id='sendVocalButton' class="transcript-buttons" style="margin-top: 20px">Send Vocal Message</button>
                 </div>
             </div>
         </div>
@@ -224,8 +227,9 @@
                 alert("The 'Open Saved Transcripts' functionality was not implemented as it is out of the scope of this project, but still displayed to get a picture of what the full implemented system would offer.");
             });
 
-            document.getElementById('sendVocalButton').addEventListener('click', function (e) {
-                alert("Do something.")
+            document.getElementById('recordVocalButton').addEventListener('click', function (e) {
+                azureSpeechToText();
+                // show a small box saying: Recording Message"
             });
 
             //Open up the transcript 
@@ -273,7 +277,12 @@
             $("#transcriptButtons").css({"top": top, "height": height});
         }
 
-        var global_messages = [{unique_id: "10", name: "Mikael", role: "co-host", content: "日本語が分かりません。", translation: "", timestamp: "2020/11/13 18:54:20"}]
+        var last_unique_id = 1
+        var global_messages = 
+        [
+            {unique_id: "0", name: "Mikael", role: "co-host", content: "日本語が分かりません。", translation: "", timestamp: new Date("2020/11/13 18:54:20")},
+            {unique_id: "1", name: "Mikael", role: "co-host", content: "おはようございます！", translation: "", timestamp: new Date("2020/11/13 18:54:20")}
+        ]
 
         // Vue 
         var transcript_content = new Vue({
@@ -284,6 +293,21 @@
         })
 
         // Azure functions
+        function transcriptionReceived(content) {
+            console.log("yeet")
+            global_messages.push({
+                unique_id: last_unique_id + 1,
+                name: "You",
+                role: "participant",
+                content: content,
+                translation: "",
+                timestamp: new Date()
+            });
+            last_unique_id = last_unique_id + 1;
+            transcript_content.data = global_messages;
+            console.log("done");
+        }
+
         function narrateMessage(id) {
             var index = id.split("-")[1];
             synthesizeSpeech(global_messages[index].content);
