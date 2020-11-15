@@ -2,6 +2,8 @@ const speechConfig = SpeechSDK.SpeechConfig.fromSubscription("e7868a10ab944f1f9c
 speechConfig.speechRecognitionLanguage = "ja-JP";
 speechConfig.speechSynthesisLanguage = "ja-JP";
 
+var toggle = 0;
+
 function fromMic() {
     let audioConfig = SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
     let recognizer = new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
@@ -72,3 +74,74 @@ function translate(input) {
         console.log(JSON.stringify(response.data, null, 4));
     })
 }
+
+window.onload = function() {
+
+    document.getElementById('endCall').addEventListener('click', function (e) {
+      if(confirm("You are about to leave the call.")){
+          window.location.replace("../index.html")
+      }
+    });
+
+    document.getElementById('camera').addEventListener('click', function (e) {
+        alert("This feature was not implemented since it is not relevant to our project proposal.")
+    });
+
+    document.getElementById('mute').addEventListener('click', function (e) {
+        alert("This feature was not implemented since it is not relevant to our project proposal.")
+    });
+
+    document.getElementById('shareScreen').addEventListener('click', function (e) {
+        alert("This feature was not implemented since it is not relevant to our project proposal.")
+    });
+
+    document.getElementById('chat').addEventListener('click', function (e) {
+        alert("This feature was not implemented since it is not relevant to our project proposal.")
+    });
+
+    document.getElementById('transcription').addEventListener('click', function (e) {
+        if(toggle == 0){
+            alert('togggle = 0')
+            var row2 = document.getElementById('rowOfVideos2');
+            row2.style.marginTop = '10px';
+            let myElements = document.querySelectorAll(".videos");
+    
+            for (let i = 0; i < myElements.length; i++) {
+                myElements[i].style.width = '400px';
+                myElements[i].style.height = '200px';
+            }
+            //setTranscriptHeight();
+            var transcript = document.getElementById('transcript');
+            transcript.style.display = 'block';
+            toggle = 1;
+        }
+        else{
+            alert('togggle = 1')
+            var row2 = document.getElementById('rowOfVideos2');
+            row2.style.marginTop = '50px';
+            let myElements = document.querySelectorAll(".videos");
+    
+            for (let i = 0; i < myElements.length; i++) {
+                myElements[i].style.width = '500px';
+                myElements[i].style.height = '250px';
+            }
+            var transcript = document.getElementById('transcript');
+            transcript.style.display = 'none';
+            toggle = 0;
+        }
+        
+    });
+};
+
+function setTranscriptHeight(){
+    var rect = document.getElementById("videoButtons").getBoundingClientRect();
+    
+	var top = rect.bottom;
+    var height = $(window).height() - top;
+    if(height < 100){
+        height = 100;
+    }
+
+	$("#transcript").css({"top": top, "height": height});
+}
+
