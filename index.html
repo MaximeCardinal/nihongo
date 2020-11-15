@@ -16,31 +16,69 @@
 
     <!-- Home Page Title -->
     <div class="container-fluid" style="height: 100px" id="index-header">
-        <img src="images/logo1.JPG" class="nav-button nav-home" alt="Logo" width="auto" height="100%">
-        <img src="images/logo2.JPG" class="nav-button nav-home" alt="Logo" width="auto" height="80%">
-        <img src="icons/user.svg" class="nav-button float-right" alt="User Icon" width="auto" height="60%" style="margin-top: 20px;" id="user-setting-button">
+        <img src="images/logo1.JPG" class="nav-home" alt="Logo" width="auto" height="100%">
+        <img src="images/logo2.JPG" class="nav-home" alt="Logo" width="auto" height="80%">
+        <img src="icons/user.svg" class="float-right" alt="User Icon" width="auto" height="60%" style="margin-top: 20px" id="user-setting-button">
     </div>
 
     <!-- Content -->
     <div class="container-fluid">
         <div class="d-flex justify-content-center" style="margin-top: 50px">
-            <label id="home-label">Home Page</label
-        ></div>
+            <label id="home-label">Home Page</label>
+        </div>
         <div class="d-flex justify-content-center" style="margin-top: 50px">
-            <div class="d-flex flex-column justify-content-center home-main-button" id="join-meeting-button">
+            <div class="d-flex flex-column home-main-button" id="join-meeting-button">
                 <img src="icons/meeting.svg" alt="Meeting" width="200px" height="auto">
                 <label class="home-main-button-label">Join/Host Meeting</label>
             </div>
-            <div class="d-flex flex-column justify-content-center home-main-button" id="saved-trans-button">
+            <div class="d-flex flex-column home-main-button" id="saved-trans-button">
                 <img src="icons/document.svg" alt="Meeting" width="200px" height="auto">
                 <label class="home-main-button-label">Saved Transcripts</label>
             </div>
-            <div class="d-flex flex-column justify-content-center home-main-button" id="saved-vocab-button">
+            <div class="d-flex flex-column home-main-button" id="saved-vocab-button">
                 <img src="icons/big-dictionary.svg" alt="Meeting" width="200px" height="auto">
                 <label class="home-main-button-label">Saved Vocabulary</label>
             </div>
         </div>
-        <div id="test" >Test</div>
+
+        <!-- Modals -->
+        <div id="join-meeting-modal" class="own-modal">
+            <div class="own-modal-header" id="join-meeting-modal-header">
+                <label>Join/Host Meeting</label>
+                <img src="icons/times.svg" class="float-right" alt="Close" width="auto" height="60%" style="margin: 8px 12px 0px 0px" id="close-join-meeting-modal">
+            </div>
+            <div class="d-flex flex-column justify-content-center" style="margin-top: 30px">
+                <div class="d-flex justify-content-center modal-row">
+                    <label id="modal-join-meeting-id-label">Meeting ID:</label>
+                    <input id="modal-join-meeting-id-input" type="text" class="form-control" placeholder="Meeting ID">
+                </div>
+                <div class="d-flex justify-content-center modal-row">
+                    <button id="modal-join-meeting-button" type="button" class="btn">Join Meeting</button>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button id="switch-to-host-modal" type="button" class="btn btn-link">Host Meeting</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="host-meeting-modal" class="own-modal">
+            <div class="own-modal-header" id="host-meeting-modal-header">
+                <label>Join/Host Meeting</label>
+                <img src="icons/times.svg" class="float-right" alt="Close" width="auto" height="60%" style="margin: 8px 12px 0px 0px" id="close-host-meeting-modal">
+            </div>
+            <div class="d-flex flex-column justify-content-center" style="margin-top: 30px">
+                <div class="d-flex justify-content-center modal-row">
+                    <label id="modal-host-meeting-id-label">Meeting ID:</label>
+                    <label id="modal-host-meeting-rand-id"></label>
+                </div>
+                <div class="d-flex justify-content-center modal-row">
+                    <button id="modal-host-meeting-button" type="button" class="btn">Host Meeting</button>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button id="switch-to-join-modal" type="button" class="btn btn-link">Join Meeting</button>
+                </div>
+            </div>
+        </div>
     </div>
      
     <!-- JavaScript -->
@@ -57,16 +95,19 @@
             $('.nav-home').click(function() {
                 window.location.href = "index.html";
             });
-            $('#test').click(function() {
-                fromMic();
+            $(".nav-home").hover(
+                function(){
+                    $(this).css({"cursor": "pointer", "opacity": "0.85"});
+                }, function(){
+                    $(this).css({"cursor": "default", "opacity": "1"});
             });
 
             // Main buttons
             $('#join-meeting-button').click(function() {
-                alert("");
+                $("#join-meeting-modal").css({"display": "block",  "top": "180px", "left": "calc(50% - 150px)"});
             });
             $('#saved-trans-button').click(function() {
-                alert("");
+                alert("The 'Saved Transcripts' functionality was not implemented as it is out of the scope of this project, but still displayed to get a picture of what the full implemented system would offer.");
             });
             $('#saved-vocab-button').click(function() {
                 alert("The 'Saved Vocabulary' functionality was not implemented as it is out of the scope of this project, but still displayed to get a picture of what the full implemented system would offer.");
@@ -84,12 +125,118 @@
             });
             $("#user-setting-button").hover(
                 function(){
-                    $(this).css({"fill": "#989898", "cursor": "pointer"});
+                    $(this).css({"cursor": "pointer", "opacity": "0.85"});
                 }, function(){
-                    $(this).css({"fill": "white", "cursor": "default"});
+                    $(this).css({"cursor": "default", "opacity": "1"});
             });
-        });
+
+            // Drag modals
+            dragElement (document.getElementById("join-meeting-modal"));
+            $("#join-meeting-modal-header").hover(
+                function(){
+                    $(this).css("cursor", "grab");
+                }, function(){
+                    $(this).css("cursor", "default");
+            });
+            dragElement (document.getElementById("host-meeting-modal"));
+            $("#host-meeting-modal-header").hover(
+                function(){
+                    $(this).css("cursor", "grab");
+                }, function(){
+                    $(this).css("cursor", "default");
+            });
+
+            // Close modals
+            $("#close-join-meeting-modal").click(function() {
+                $("#join-meeting-modal").css("display", "none");
+            });
+            $("#close-join-meeting-modal").hover(
+                function(){
+                    $(this).css({"cursor": "pointer", "opacity": "0.85"});
+                }, function(){
+                    $(this).css({"cursor": "default", "opacity": "1"});
+            });
+            $("#close-host-meeting-modal").click(function() {
+                $("#host-meeting-modal").css("display", "none");
+            });
+            $("#close-host-meeting-modal").hover(
+                function(){
+                    $(this).css({"cursor": "pointer", "opacity": "0.85"});
+                }, function(){
+                    $(this).css({"cursor": "default", "opacity": "1"});
+            });
+
+            // Navigate from modal to meeting
+            $("#modal-join-meeting-button").click(function() {
+                // navigate next page
+                alert("Must add navigation to meeting page");
+            });
+            $("#modal-join-meeting-button").hover(
+                function(){
+                    $(this).css({"cursor": "pointer", "background-color": "#cf7100"});
+                }, function(){
+                    $(this).css({"cursor": "default", "background-color": "#f98903"});
+            });
+            $("#modal-host-meeting-button").click(function() {
+                // navigate next page
+                alert("Must add navigation to meeting page");
+            });
+            $("#modal-host-meeting-button").hover(
+                function(){
+                    $(this).css({"cursor": "pointer", "background-color": "#cf7100"});
+                }, function(){
+                    $(this).css({"cursor": "default", "background-color": "#f98903"});
+            });
+
+            // Switch modal
+            $("#switch-to-host-modal").click(function() {
+                $("#join-meeting-modal").css({"display": "none", "top": "180px", "left": "calc(50% - 150px)"});
+                $("#host-meeting-modal").css({"display": "block", "top": "180px", "left": "calc(50% - 150px)"});
+                $("#modal-host-meeting-rand-id").text((Math.random() * 1000000).toFixed(0));
+            });
             
+            $("#switch-to-join-modal").click(function() {
+                $("#host-meeting-modal").css({"display": "none", "top": "180px", "left": "calc(50% - 150px)"});
+                $("#join-meeting-modal").css({"display": "block", "top": "180px", "left": "calc(50% - 150px)"});
+            });
+            
+        });    
+        
+        // src: https://www.w3schools.com/howto/howto_js_draggable.asp
+        function dragElement (elmnt) {
+        
+            var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            document.getElementById(elmnt.id + "-header").onmousedown = dragMouseDown;
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // get the mouse cursor position at startup:
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                // call a function whenever the cursor moves:
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                // calculate the new cursor position:
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                // set the element's new position:
+                elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+                elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+            }
+
+            function closeDragElement() {
+                // stop moving when mouse button is released:
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
     </script>
 
 </body>

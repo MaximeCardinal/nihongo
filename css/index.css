@@ -27,3 +27,48 @@
 }
 
 label { pointer-events: none; }
+
+.own-modal {
+    z-index: 1;
+    position: absolute;
+    top: 180px;
+    border: solid 3px black;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.own-modal-header {
+    height: 50px;
+    background-color:#f98903;
+    border-bottom: solid 3px black;
+    color: white;
+    font-size: 25px;
+    padding: 5px 0px 0px 10px;
+}
+
+.modal-row {
+    margin: 10px;
+}
+
+#join-meeting-modal, #host-meeting-modal {
+    left: calc(50% - 150px);
+    width: 400px;
+    height: 250px;
+    display: none;
+}
+
+#modal-join-meeting-id-label, #modal-host-meeting-id-label, #modal-host-meeting-rand-id {
+    color: black;
+    font-size: 18px;
+    margin: 6px 16px 0px 0px;
+}
+
+#modal-join-meeting-id-input, #modal-host-meeting-id-input {
+    width: 200px;
+}
+
+#modal-join-meeting-button, #modal-host-meeting-button {
+    background-color:#f98903;
+    color: white;
+    font-size: 18px;;
+}
