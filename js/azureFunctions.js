@@ -42,7 +42,7 @@ function uuidv4() {
     );
 }
 
-function translate(input) {
+function azureTranslate(input, index) {
 
     var subscriptionKey = "4a6a592e8aae48b5988a1de2f5ff433a";
     var endpoint = "https://api.cognitive.microsofttranslator.com/";
@@ -71,20 +71,6 @@ function translate(input) {
         }],
         responseType: 'json'
     }).then(function(response){
-        console.log(JSON.stringify(response.data, null, 4));
+        translationReceived(input, response.data[0].translations[0].text, index);
     })
 }
-
-function setTranscriptHeight(){
-    var rect = document.getElementById("videoButtons").getBoundingClientRect();
-    
-	var top = rect.bottom;
-    var height = $(window).height() - top;
-    if(height < 100){
-        height = 100;
-    }
-
-    $("#transcriptText").css({"top": top, "height": height});
-    $("#transcriptButtons").css({"top": top, "height": height});
-}
-
