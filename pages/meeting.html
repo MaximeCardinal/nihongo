@@ -8,7 +8,7 @@
 
   <!-- CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="../css/meeting.css">
   <title>日本GO</title>
 </head>
 
@@ -16,9 +16,9 @@
 
     <!-- Home Page Title -->
     <div class="container-fluid" style="height: 100px" id="index-header">
-        <img src="images/logo1.JPG" class="nav-button nav-home" alt="Logo" width="auto" height="100%">
-        <img src="images/logo2.JPG" class="nav-button nav-home" alt="Logo" width="auto" height="80%">
-        <img src="icons/user.svg" class="nav-button float-right" alt="User Icon" width="auto" height="60%" style="margin-top: 20px;">
+        <img src="../images/logo1.JPG" class="nav-button nav-home" alt="Logo" width="auto" height="100%">
+        <img src="../images/logo2.JPG" class="nav-button nav-home" alt="Logo" width="auto" height="80%">
+        <img src="../icons/user.svg" class="nav-button float-right" alt="User Icon" width="auto" height="60%" style="margin-top: 20px;">
     </div>
 
     <!-- Content -->
@@ -47,42 +47,44 @@
     <div id="videoButtons" class="container-fluid">
         <div class="d-flex justify-content-center" style="margin-top: 0px">
             <div class="d-flex flex-column justify-content-center meeting-icons">
-                <img id="camera" src="icons/video.svg" alt="videos" width="100%" height="auto" data-toggle="tooltip" title="Toggle Camera">
+                <img id="camera" src="../icons/video.svg" alt="videos" width="100%" height="auto" data-toggle="tooltip" title="Toggle Camera">
             </div>
             <div class="d-flex flex-column justify-content-center meeting-icons">
-                <img id="mute" src="icons/microphone.svg" alt="microphone" width="auto" height="100%" data-toggle="tooltip" title="Mute">
+                <img id="mute" src="../icons/microphone.svg" alt="microphone" width="auto" height="100%" data-toggle="tooltip" title="Mute">
             </div>
             <div class="d-flex flex-column justify-content-center meeting-icons">
-                <img id="chat" src="icons/comment.svg" alt="chat" width="100%" height="auto" data-toggle="tooltip" title="Toggle Chat">
+                <img id="chat" src="../icons/comment.svg" alt="chat" width="100%" height="auto" data-toggle="tooltip" title="Toggle Chat">
             </div>
             <div class="d-flex flex-column justify-content-center meeting-icons">
-                <img id="shareScreen" src="icons/screen.svg" alt="shareScreen" width="100%" height="auto" data-toggle="tooltip" title="Share Screen">
+                <img id="shareScreen" src="../icons/screen.svg" alt="shareScreen" width="100%" height="auto" data-toggle="tooltip" title="Share Screen">
             </div>
             <div class="d-flex flex-column justify-content-center meeting-icons">
-                <img id="transcription" src="icons/file-alt.svg" alt="transcription" width="auto" height="90%" data-toggle="tooltip" title="Enable Transcription">
+                <img id="transcription" src="../icons/file-alt.svg" alt="transcription" width="auto" height="90%" data-toggle="tooltip" title="Enable Transcription">
             </div>
             <div class="d-flex flex-column justify-content-center meeting-icons">
-                <img id="endCall" src="icons/call.svg" alt="endCall" width="100%" height="auto" data-toggle="tooltip" title="End Call">
+                <img id="endCall" src="../icons/call.svg" alt="endCall" width="100%" height="auto" data-toggle="tooltip" title="End Call">
             </div>
         </div>
     </div>
 
     <div class="container-fluid transcriptStyle" id='transcript'>
-        <div class="d-flex flex-column" style="width: 75%">
-            <label>TEst</label> <br>
-            <label>TEst</label> <br>
-            <label>TEst</label> <br>
-            <label>TEst</label> <br>
-            <label>TEst</label> <br>
-            <label>TEst</label> <br>
-            <label>TEst</label> <br>
-            <label>TEst</label> <br>
-            <label>TEst</label> <br>
-            <label>TEst</label> <br>
-            <label>TEst</label> <br>
-        </div>
-        <div class="d-flex flex-column" >
-            <label>Buttons</label>
+        <div class="d-flex">
+            <div class="d-flex flex-column" style="width: 75%">
+                <label>TEst</label> <br>
+                <label>TEst</label> <br>
+                <label>TEst</label> <br>
+                <label>TEst</label> <br>
+                <label>TEst</label> <br>
+                <label>TEst</label> <br>
+                <label>TEst</label> <br>
+                <label>TEst</label> <br>
+                <label>TEst</label> <br>
+                <label>TEst</label> <br>
+                <label>TEst</label> <br>
+            </div>
+            <div class="d-flex flex-column" >
+                <label>Buttons</label>
+            </div>
         </div>
     </div>
      
@@ -92,15 +94,64 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
     
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-    <script src="/js/microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
-    <script src="/js/main.js"></script>
+    <script src="../js/microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
+    <script src="../js/main.js"></script>
 
     <script>
-        $(document).ready(function() {
-            $('.nav-home').click(function() {
-                window.location.href = "index.html";
+       window.onload = function() {
+
+            document.getElementById('endCall').addEventListener('click', function (e) {
+                if(confirm("You are about to leave the call.")){
+                    window.location.replace("../index.html")
+                }
             });
-        });
+
+            document.getElementById('camera').addEventListener('click', function (e) {
+                alert("This feature was not implemented since it is not relevant to our project proposal.")
+            });
+
+            document.getElementById('mute').addEventListener('click', function (e) {
+                alert("This feature was not implemented since it is not relevant to our project proposal.")
+            });
+
+            document.getElementById('shareScreen').addEventListener('click', function (e) {
+                alert("This feature was not implemented since it is not relevant to our project proposal.")
+            });
+
+            document.getElementById('chat').addEventListener('click', function (e) {
+                alert("This feature was not implemented since it is not relevant to our project proposal.")
+            });
+
+            document.getElementById('transcription').addEventListener('click', function (e) {
+                if(toggle == 0){
+                    var row2 = document.getElementById('rowOfVideos2');
+                    row2.style.marginTop = '10px';
+                    let myElements = document.querySelectorAll(".videos");
+
+                    for (let i = 0; i < myElements.length; i++) {
+                        myElements[i].style.width = '400px';
+                        myElements[i].style.height = '200px';
+                    }
+                    setTranscriptHeight();
+                    var transcript = document.getElementById('transcript');
+                    transcript.style.display = 'block';
+                    toggle = 1;
+                }
+                else{
+                    var row2 = document.getElementById('rowOfVideos2');
+                    row2.style.marginTop = '50px';
+                    let myElements = document.querySelectorAll(".videos");
+
+                    for (let i = 0; i < myElements.length; i++) {
+                        myElements[i].style.width = '500px';
+                        myElements[i].style.height = '250px';
+                    }
+                    var transcript = document.getElementById('transcript');
+                    transcript.style.display = 'none';
+                    toggle = 0;
+                }
+            });
+        };
     </script>
 
 </body>

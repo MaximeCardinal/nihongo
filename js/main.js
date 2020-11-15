@@ -75,64 +75,6 @@ function translate(input) {
     })
 }
 
-window.onload = function() {
-
-    document.getElementById('endCall').addEventListener('click', function (e) {
-      if(confirm("You are about to leave the call.")){
-          window.location.replace("../index.html")
-      }
-    });
-
-    document.getElementById('camera').addEventListener('click', function (e) {
-        alert("This feature was not implemented since it is not relevant to our project proposal.")
-    });
-
-    document.getElementById('mute').addEventListener('click', function (e) {
-        alert("This feature was not implemented since it is not relevant to our project proposal.")
-    });
-
-    document.getElementById('shareScreen').addEventListener('click', function (e) {
-        alert("This feature was not implemented since it is not relevant to our project proposal.")
-    });
-
-    document.getElementById('chat').addEventListener('click', function (e) {
-        alert("This feature was not implemented since it is not relevant to our project proposal.")
-    });
-
-    document.getElementById('transcription').addEventListener('click', function (e) {
-        if(toggle == 0){
-            alert('togggle = 0')
-            var row2 = document.getElementById('rowOfVideos2');
-            row2.style.marginTop = '10px';
-            let myElements = document.querySelectorAll(".videos");
-    
-            for (let i = 0; i < myElements.length; i++) {
-                myElements[i].style.width = '400px';
-                myElements[i].style.height = '200px';
-            }
-            //setTranscriptHeight();
-            var transcript = document.getElementById('transcript');
-            transcript.style.display = 'block';
-            toggle = 1;
-        }
-        else{
-            alert('togggle = 1')
-            var row2 = document.getElementById('rowOfVideos2');
-            row2.style.marginTop = '50px';
-            let myElements = document.querySelectorAll(".videos");
-    
-            for (let i = 0; i < myElements.length; i++) {
-                myElements[i].style.width = '500px';
-                myElements[i].style.height = '250px';
-            }
-            var transcript = document.getElementById('transcript');
-            transcript.style.display = 'none';
-            toggle = 0;
-        }
-        
-    });
-};
-
 function setTranscriptHeight(){
     var rect = document.getElementById("videoButtons").getBoundingClientRect();
     
