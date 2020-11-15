@@ -24,22 +24,24 @@
     <!-- Content -->
     <div class="container-fluid">
         <div class="d-flex justify-content-center" style="margin-top: 50px">
-            <div class="d-flex flex-column justify-content-center videos">
-                <label class="nav-item nav-link">Video 1</label>
+            <div class="d-flex flex-column videos">
+                <img src="../images/oliver.gif" class="gifs">
             </div>
-            <div class="d-flex flex-column justify-content-center videos">
-                <label class="home-main-button-label">Video 2</label>
+            <div class="d-flex flex-column videos">
+                <img src="../images/oliver.gif" class="gifs">
             </div>
         </div>
     </div>
 
     <div class="container-fluid">
         <div id="rowOfVideos2" class="d-flex justify-content-center" style="margin-top: 50px">
-            <div class="d-flex flex-column justify-content-center videos">
-                <label class="nav-item nav-link">Video 3</label>
+            <div class="d-flex flex-column videos" style="background-color: black;">
+                <div> 
+                    <label class="d-flex justify-content-center" style="color: white; font-size: 30px; margin-top: 90px" >Shigeru (Host)</label>
+                </div>
             </div>
-            <div class="d-flex flex-column justify-content-center videos">
-                <label class="home-main-button-label">Video 4</label>
+            <div class="d-flex flex-column videos">
+                <img src="../images/oliver.gif" class="gifs">
             </div>
         </div>
     </div>
@@ -69,35 +71,35 @@
 
     <div class="container-fluid hidden" id='transcript'>
         <div class="d-flex">
-            <div id='transcriptText' class="d-flex scroll addBorder" style="width: 75%">
-                <table>
+            <div id='transcriptText' class="scroll addBorder" style="width: calc(100% - 250px);">
+                <table style="width: 100%; table-layout: auto;">
                     <tbody>
                         <tr v-for="(item, index) in messages" class="transcript-message-row">
-                            <td>
+                            <td style="padding: 8px 8px 2px 8px; white-space: nowrap;"> 
                                 <label class="transcript-message-name">{{ item.name }}</label> 
                                 <label class="transcript-message-role">({{ item.role }})</label> :
                             </td>
                             <td class="transcript-message-content">{{ item.content }}</td>
+                            <td class="transcript-message-time">{{ item.timestamp.getHours() }}:{{ item.timestamp.getMinutes() }}</td>
                             <td class="transcript-message-buttons-container">
                                 <img :id="'narrate-' + index" class="transcript-message-buttons" src="../icons/volume-up.svg" alt="Narrate" width="20px" height="auto" onclick="narrateMessage(this.id)">
                                 <img :id="'translate-' + index" class="transcript-message-buttons" src="../icons/language.svg" alt="Translate" width="30px" height="auto" onclick="translateMessage(this.id)">
                                 <img :id="'share-' + index" class="transcript-message-buttons" src="../icons/share-square.svg" alt="Share" width="20px" height="auto" onclick="shareMessage(this.id)">
                             </td>
-                            <td class="transcript-message-time">{{ item.timestamp.getHours() }}:{{ item.timestamp.getMinutes() }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
             <!-- Need to center the buttons wrt the width -->
-            <div id='transcriptButtons' class="d-flex flex-column justify-content-center addBorder" style="width: 25%" >
+            <div id='transcriptButtons' class="d-flex flex-column justify-content-center addBorder" style="width: 250px" >
                 <div class="d-flex justify-content-center">
-                    <button id='recordVocalButton' class="transcript-buttons" style="margin-top: 20px">Record Vocal Message</button>
+                    <button id='recordVocalButton' class="transcript-buttons btn" >Record Vocal Message</button>
                 </div>
                 <div class="d-flex justify-content-center">
-                    <button id='speechButton' class="transcript-buttons">Speech Bubbles</button>
+                    <button id='speechButton' class="transcript-buttons btn" style="margin-top: 20px">Speech Bubbles</button>
                 </div>
                 <div class="d-flex justify-content-center">
-                    <button id='openTranscriptButton' class="transcript-buttons" style="margin-top: 20px">Open Saved Transcripts</button>
+                    <button id='openTranscriptButton' class="transcript-buttons btn" style="margin-top: 20px">Open Saved Transcripts</button>
                 </div>
             </div>
         </div>
@@ -230,6 +232,13 @@
             document.getElementById('recordVocalButton').addEventListener('click', function (e) {
                 azureSpeechToText();
                 // show a small box saying: Recording Message"
+            });
+
+            $(".transcript-buttons").hover(
+                function(){
+                    $(this).css({"cursor": "pointer", "background-color": "#cf7100"});
+                }, function(){
+                    $(this).css({"cursor": "default", "background-color": "#f98903"});
             });
 
             //Open up the transcript 
