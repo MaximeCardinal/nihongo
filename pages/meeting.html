@@ -62,7 +62,7 @@
                 <img id="transcription" src="../icons/file-alt.svg" alt="transcription" width="auto" height="90%" data-toggle="tooltip" title="Enable Transcription">
             </div>
             <div class="d-flex flex-column justify-content-center meeting-icons">
-                <img id="endCall" src="../icons/phone-slash.svg" alt="endCall" width="100%" height="auto" data-toggle="tooltip" title="End Call">
+                <img id="leaveMeeting" src="../icons/phone-slash.svg" alt="leaveMeeting" width="100%" height="auto" data-toggle="tooltip" title="Leave Meeting">
             </div>
         </div>
     </div>
@@ -132,8 +132,8 @@
        window.onload = function() {
             //Go home
             $('.nav-home').click(function() {
-                var endCallModal = document.getElementById('end-call-modal');
-                endCallModal.style.display = 'block';
+                var leaveMeetingModal = document.getElementById('end-call-modal');
+                leaveMeetingModal.style.display = 'block';
             });
 
             $(".nav-home").hover(
@@ -155,14 +155,14 @@
             });
 
             // End Call Modal
-            document.getElementById('endCall').addEventListener('click', function (e) {
-                var endCallModal = document.getElementById('end-call-modal');
-                endCallModal.style.display = 'block';
+            document.getElementById('leaveMeeting').addEventListener('click', function (e) {
+                var leaveMeetingModal = document.getElementById('end-call-modal');
+                leaveMeetingModal.style.display = 'block';
             });
 
             document.getElementById('close-end-call-modal').addEventListener('click', function (e) {
-                var endCallModal = document.getElementById('end-call-modal');
-                endCallModal.style.display = 'none';
+                var leaveMeetingModal = document.getElementById('end-call-modal');
+                leaveMeetingModal.style.display = 'none';
             });
             $("#close-end-call-modal").hover(
                 function(){
@@ -183,8 +183,8 @@
             });
 
             document.getElementById('stay-meeting-button').addEventListener('click', function (e) {
-                var endCallModal = document.getElementById('end-call-modal');
-                endCallModal.style.display = 'none';
+                var leaveMeetingModal = document.getElementById('end-call-modal');
+                leaveMeetingModal.style.display = 'none';
             });
 
             $("#stay-meeting-button").hover(
