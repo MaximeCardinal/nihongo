@@ -18,7 +18,7 @@
     <div class="container-fluid" style="height: 100px" id="index-header">
         <img src="../images/logo1.JPG" class="nav-button nav-home" alt="Logo" width="auto" height="100%">
         <img src="../images/logo2.JPG" class="nav-button nav-home" alt="Logo" width="auto" height="80%">
-        <img src="../icons/user.svg" class="nav-button float-right" alt="User Icon" width="auto" height="60%" style="margin-top: 20px;">
+        <img id="user-setting-button" src="../icons/user.svg" class="nav-button float-right" alt="User Icon" width="auto" height="60%" style="margin-top: 20px;">
     </div>
 
     <!-- Content -->
@@ -67,9 +67,9 @@
         </div>
     </div>
 
-    <div class="container-fluid transcriptStyle" id='transcript'>
+    <div class="container-fluid hidden" id='transcript'>
         <div class="d-flex">
-            <div class="d-flex flex-column" style="width: 75%">
+            <div id='transcriptText' class="d-flex flex-column scroll addBorder" style="width: 75%">
                 <label>TEst</label> <br>
                 <label>TEst</label> <br>
                 <label>TEst</label> <br>
@@ -82,9 +82,33 @@
                 <label>TEst</label> <br>
                 <label>TEst</label> <br>
             </div>
-            <div class="d-flex flex-column" >
-                <label>Buttons</label>
+            <!-- Need to center the buttons wrt the width -->
+            <div id='transcriptButtons' class="d-flex flex-column justify-content-center addBorder" style="width: 25%" >
+                <div class="d-flex justify-content-center">
+                    <button id='speechButton' class="transcript-buttons">Speech Bubbles</button>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button id='openTranscriptButton' class="transcript-buttons" style="margin-top: 20px">Open Saved Transcripts</button>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <button id='sendVocalButton' class="transcript-buttons" style="margin-top: 20px">Send Vocal Message</button>
+                </div>
             </div>
+        </div>
+    </div>
+
+    <div id="end-call-modal" class="own-modal">
+        <div class="own-modal-header" id="end-call-modal-header">
+            <label>Leave Meeting</label>
+            <img src="../icons/times.svg" class="float-right" alt="Close" width="auto" height="60%" style="margin: 8px 12px 0px 0px" id="close-end-call-modal">
+        </div>
+        <div class="d-flex flex-column">
+            <p class="center-text" style='margin: 20px 20px 20px 20px'>You are about to leave this meeting. Any active transcription will end and be saved under your "Saved Transcripts."</p>
+            <p class="center-text" style='margin: 0px 20px 20px 20px'>Are you sure you want to leave?</p>
+        </div>
+        <div class="d-flex justify-content-center">
+            <button id="leave-call-button" class="btn">Leave meeting</button>
+            <button id='stay-meeting-button' class="btn" style="margin-left: 20px">Stay in meeting</button>
         </div>
     </div>
      
@@ -99,13 +123,65 @@
 
     <script>
        window.onload = function() {
-
-            document.getElementById('endCall').addEventListener('click', function (e) {
-                if(confirm("You are about to leave the call.")){
-                    window.location.replace("../index.html")
-                }
+            //Go home
+            $('.nav-home').click(function() {
+                var endCallModal = document.getElementById('end-call-modal');
+                endCallModal.style.display = 'block';
             });
 
+            $(".nav-home").hover(
+                function(){
+                    $(this).css({"cursor": "pointer", "opacity": "0.85"});
+                }, function(){
+                    $(this).css({"cursor": "default", "opacity": "1"});
+            });
+
+            // User settings button
+            $('#user-setting-button').click(function() {
+                alert("The 'User Settings' functionality was not implemented as it is out of the scope of this project, but still displayed to get a picture of what the full implemented system would offer.");
+            });
+            $("#user-setting-button").hover(
+                function(){
+                    $(this).css({"cursor": "pointer", "opacity": "0.85"});
+                }, function(){
+                    $(this).css({"cursor": "default", "opacity": "1"});
+            });
+
+            //End call
+            document.getElementById('endCall').addEventListener('click', function (e) {
+                var endCallModal = document.getElementById('end-call-modal');
+                endCallModal.style.display = 'block';
+            });
+
+            document.getElementById('close-end-call-modal').addEventListener('click', function (e) {
+                var endCallModal = document.getElementById('end-call-modal');
+                endCallModal.style.display = 'none';
+            });
+
+            document.getElementById('leave-call-button').addEventListener('click', function (e) {
+                window.location.href = "../index.html";
+            });
+            
+            $("#leave-call-button").hover(
+                function(){
+                    $(this).css({"cursor": "pointer", "background-color": "#e60000"});
+                }, function(){
+                    $(this).css({"cursor": "default", "background-color": "#ff0000"});
+            });
+
+            document.getElementById('stay-meeting-button').addEventListener('click', function (e) {
+                var endCallModal = document.getElementById('end-call-modal');
+                endCallModal.style.display = 'none';
+            });
+
+            $("#stay-meeting-button").hover(
+                function(){
+                    $(this).css({"cursor": "pointer", "background-color": "#8c8c8c"});
+                }, function(){
+                    $(this).css({"cursor": "default", "background-color": "#a6a6a6"});
+            });
+
+            //Video conference button
             document.getElementById('camera').addEventListener('click', function (e) {
                 alert("This feature was not implemented since it is not relevant to our project proposal.")
             });
@@ -122,6 +198,20 @@
                 alert("This feature was not implemented since it is not relevant to our project proposal.")
             });
 
+            //Transcript buttons
+            document.getElementById('speechButton').addEventListener('click', function (e) {
+                alert("This feature will be implemented in our Beta System");
+            });
+
+            document.getElementById('openTranscriptButton').addEventListener('click', function (e) {
+                alert("This feature was not implemented since it is not relevant to our project proposal.")
+            });
+
+            document.getElementById('sendVocalButton').addEventListener('click', function (e) {
+                alert("Do something.")
+            });
+
+            //Open up the transcript 
             document.getElementById('transcription').addEventListener('click', function (e) {
                 if(toggle == 0){
                     var row2 = document.getElementById('rowOfVideos2');

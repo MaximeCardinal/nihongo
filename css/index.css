@@ -51,7 +51,7 @@ label { pointer-events: none; }
 }
 
 #join-meeting-modal, #host-meeting-modal {
-    left: calc(50% - 150px);
+    left: calc(50% - 200px);
     width: 400px;
     height: 250px;
     display: none;

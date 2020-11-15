@@ -84,6 +84,7 @@ function setTranscriptHeight(){
         height = 100;
     }
 
-	$("#transcript").css({"top": top, "height": height});
+    $("#transcriptText").css({"top": top, "height": height});
+    $("#transcriptButtons").css({"top": top, "height": height});
 }
 
