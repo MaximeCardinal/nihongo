@@ -25,10 +25,10 @@
     <div class="container-fluid">
         <div class="d-flex justify-content-center" style="margin-top: 50px">
             <div class="d-flex flex-column videos">
-                <img src="../images/oliver.gif" class="gifs">
+                <img src="../images/jacob.gif" class="gifs">
             </div>
             <div class="d-flex flex-column videos">
-                <img src="../images/oliver.gif" class="gifs">
+                <img src="../images/max.gif" class="gifs">
             </div>
         </div>
     </div>
@@ -69,8 +69,10 @@
         </div>
     </div>
 
+    <!-- Transcript Pane -->
     <div class="container-fluid hidden" id='transcript'>
         <div class="d-flex">
+            <!-- Transcript -->
             <div id='transcriptText' class="scroll addBorder" style="width: calc(100% - 250px);">
                 <table style="width: 100%; table-layout: auto;">
                     <tbody>
@@ -79,32 +81,33 @@
                                 <label class="transcript-message-name">{{ item.name }}</label> 
                                 <label class="transcript-message-role">({{ item.role }})</label> :
                             </td>
-                            <td class="transcript-message-content">{{ item.content }}</td>
-                            <td class="transcript-message-time">{{ item.timestamp.getHours() }}:{{ item.timestamp.getMinutes() }}</td>
-                            <td class="transcript-message-buttons-container">
-                                <img :id="'narrate-' + index" class="transcript-message-buttons" src="../icons/volume-up.svg" alt="Narrate" width="20px" height="auto" onclick="narrateMessage(this.id)">
-                                <img :id="'translate-' + index" class="transcript-message-buttons" src="../icons/language.svg" alt="Translate" width="30px" height="auto" onclick="translateMessage(this.id)">
-                                <img :id="'share-' + index" class="transcript-message-buttons" src="../icons/share-square.svg" alt="Share" width="20px" height="auto" onclick="shareMessage(this.id)">
+                            <td class="transcript-message-content" style="padding: 8px 8px 2px 8px;">{{ item.content }}</td>
+                            <td class="transcript-message-time" style="padding: 8px 8px 2px 8px;">{{ item.timestamp.getHours() }}:{{ formatMinutes(item.timestamp.getMinutes()) }}</td>
+                            <td class="transcript-message-buttons-container" style="padding: 8px 8px 2px 8px;">
+                                <img :id="'narrate-' + index" class="transcript-message-buttons" src="../icons/volume-up.svg" alt="Narrate" width="20px" height="auto" onclick="narrateMessage(this.id)" onmouseover="transcriptMessageButtons_onMouseHover(this)" onmouseout="transcriptMessageButtons_onMouseOut(this)" data-toggle="tooltip" title="Narrate">
+                                <img :id="'translate-' + index" class="transcript-message-buttons" src="../icons/language.svg" alt="Translate" width="30px" height="auto" onclick="translateMessage(this.id)" onmouseover="transcriptMessageButtons_onMouseHover(this)" onmouseout="transcriptMessageButtons_onMouseOut(this)" data-toggle="tooltip" title="Translate">
+                                <img :id="'share-' + index" class="transcript-message-buttons" src="../icons/share-square.svg" alt="Share" width="20px" height="auto" onclick="shareMessage(this.id)" onmouseover="transcriptMessageButtons_onMouseHover(this)" onmouseout="transcriptMessageButtons_onMouseOut(this)" data-toggle="tooltip" title="Share">
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <!-- Need to center the buttons wrt the width -->
+            <!-- Right Buttons -->
             <div id='transcriptButtons' class="d-flex flex-column justify-content-center addBorder" style="width: 250px" >
                 <div class="d-flex justify-content-center">
-                    <button id='recordVocalButton' class="transcript-buttons btn" >Record Vocal Message</button>
+                    <button id='recordVocalButton' class="btn transcript-buttons">Record Vocal Message</button>
                 </div>
                 <div class="d-flex justify-content-center">
-                    <button id='speechButton' class="transcript-buttons btn" style="margin-top: 20px">Speech Bubbles</button>
+                    <button id='speechButton' class="btn transcript-buttons" style="margin-top: 10px">Speech Bubbles</button>
                 </div>
                 <div class="d-flex justify-content-center">
-                    <button id='openTranscriptButton' class="transcript-buttons btn" style="margin-top: 20px">Open Saved Transcripts</button>
+                    <button id='openTranscriptButton' class="btn transcript-buttons" style="margin-top: 10px">Open Saved Transcripts</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- End Call Modal -->
     <div id="end-call-modal" class="own-modal">
         <div class="own-modal-header" id="end-call-modal-header">
             <label>Leave Meeting</label>
@@ -119,8 +122,37 @@
             <button id='stay-meeting-button' class="btn" style="margin-left: 20px">Stay in meeting</button>
         </div>
     </div>
+
+    <!-- Translation Modal -->
+    <div id="translation-modal" class="own-modal">
+        <div class="own-modal-header" id="translation-modal-header">
+            <label>Translation</label>
+            <img src="../icons/times.svg" class="float-right" alt="Close" width="auto" height="60%" style="margin: 8px 12px 0px 0px" id="close-translation-modal">
+        </div>
+        <div style="margin: 20px; font-size: 18px;">
+            <table>
+                <tbody style="height: 180px; display: block; overflow-y: scroll;">
+                    <tr>
+                        <td><b>Japanese: </b></td>
+                        <td>{{ input }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>English: </b></td>
+                        <td>{{ output }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+
+    <!-- System Status Modal -->
+    <div id="modal-system-status">
+        <label>{{ type }} {{ dot_nb }}</label>	
+    </div>
      
     <!-- JavaScript -->
+    <script src="../credentials.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
@@ -129,6 +161,7 @@
     <script src="../js/microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="../js/azureFunctions.js"></script>
+    <script src="../js/simulation.js"></script>
 
     <script>
        window.onload = function() {
@@ -196,6 +229,17 @@
                     $(this).css({"cursor": "default", "background-color": "#a6a6a6"});
             });
 
+            // Translation Modal 
+            $("#close-translation-modal").click(function() {
+                $("#translation-modal").css("display", "none");
+            });
+            $("#close-translation-modal").hover(
+                function(){
+                    $(this).css({"cursor": "pointer", "opacity": "0.85"});
+                }, function(){
+                    $(this).css({"cursor": "default", "opacity": "1"});
+            });
+
             //Video conference button
             $(".meeting-icons img").hover(
                 function(){
@@ -230,13 +274,14 @@
             });
 
             document.getElementById('recordVocalButton').addEventListener('click', function (e) {
+                system_status.recording();
+                $("#modal-system-status").css("display", "block");
                 azureSpeechToText();
-                // show a small box saying: Recording Message"
             });
 
             $(".transcript-buttons").hover(
                 function(){
-                    $(this).css({"cursor": "pointer", "background-color": "#cf7100"});
+                    $(this).css({"cursor": "pointer", "background-color": "#cf7100", "color": "white"});
                 }, function(){
                     $(this).css({"cursor": "default", "background-color": "#f98903"});
             });
@@ -256,6 +301,7 @@
                     var transcript = document.getElementById('transcript');
                     transcript.style.display = 'block';
                     toggle = 1;
+                    simulate();
                 }
                 else{
                     var row2 = document.getElementById('rowOfVideos2');
@@ -286,25 +332,87 @@
             $("#transcriptButtons").css({"top": top, "height": height});
         }
 
-        var last_unique_id = 1
-        var global_messages = 
-        [
-            {unique_id: "0", name: "Mikael", role: "co-host", content: "日本語が分かりません。", translation: "", timestamp: new Date("2020/11/13 18:54:20")},
-            {unique_id: "1", name: "Mikael", role: "co-host", content: "おはようございます！", translation: "", timestamp: new Date("2020/11/13 18:54:20")}
-        ]
+        function transcriptMessageButtons_onMouseHover(elem) {
+            $(elem).css({"cursor": "pointer", "opacity": "0.5"});
+        }
+        function transcriptMessageButtons_onMouseOut(elem) {
+            $(elem).css({"cursor": "default", "opacity": "1"});
+        }
+
+        var toggle = 0;
+        var last_unique_id = 0;
 
         // Vue 
         var transcript_content = new Vue({
             el: '#transcriptText',
             data: {
-                messages: global_messages
+                messages: [
+                    {
+                        unique_id: "0",
+                        name: "Shigeru",
+                        role: "host",
+                        content: "みんなさんこんにちは！",
+                        translation: "",
+                        timestamp: new Date()
+                    }
+                ]
+            },
+            methods : {
+                formatMinutes: function(minutes) {
+                    if (minutes < 10) {
+                        return "0" + minutes;
+                    }
+                    else {
+                        return minutes;
+                    }
+                }
+            }
+        })
+
+        var system_status = new Vue({
+            el: '#modal-system-status',
+            data: {
+                html: "",
+            type: "",
+            dot_interval: "",
+            dot_nb: ""
+            },
+            methods: {
+                recording: function () {
+                    this.type = "Recording";
+                    this.startInterval();
+                },
+                translating: function () {
+                    this.type = "Translating";
+                    this.startInterval();
+                },
+                startInterval : function () {
+                    this.dot_interval = window.setInterval( function() {
+                            if ( system_status.dot_nb.length > 2 ) 
+                                system_status.dot_nb = "";
+                            else 
+                                system_status.dot_nb += ".";
+                            }, 250);
+                },
+                stopInterval : function () {
+                    clearInterval(this.dot_interval);
+                    this.dot_nb = "";
+                }
+            }
+        })
+        
+        var translation = new Vue({
+            el: '#translation-modal',
+            data: {
+                input: "",
+                output: ""
             }
         })
 
         // Azure functions
         function transcriptionReceived(content) {
-            console.log("yeet")
-            global_messages.push({
+            
+            transcript_content.messages.push({
                 unique_id: last_unique_id + 1,
                 name: "You",
                 role: "participant",
@@ -313,44 +421,45 @@
                 timestamp: new Date()
             });
             last_unique_id = last_unique_id + 1;
-            transcript_content.data = global_messages;
-            console.log("done");
+
+            system_status.stopInterval()
+            $("#modal-system-status").css("display", "none");
         }
 
         function narrateMessage(id) {
             var index = id.split("-")[1];
-            synthesizeSpeech(global_messages[index].content);
+            synthesizeSpeech(transcript_content.messages[index].content);
         }
 
         function translateMessage(id) {
             var index = id.split("-")[1];
 
-            if(global_messages[index].translation == "") {
-                azureTranslate(global_messages[index].content, index);
+            if(transcript_content.messages[index].translation == "") {
+                system_status.translating();
+                $("#modal-system-status").css("display", "block");
+                azureTranslate(transcript_content.messages[index].content, index);
             }
             else {
-                translationReceived(global_messages[index].content, global_messages[index].translation, index);
+                translationReceived(transcript_content.messages[index].content, transcript_content.messages[index].translation, index);
             }
-            
         }
 
         function translationReceived(input, output, index) {
 
-            global_messages[index].translation = output;
-            console.log(output);
+            transcript_content.messages[index].translation = output;
+            // console.log(output);
 
-            // update data in a modal
-            // display translate modal
+            translation.input = input;
+            translation.output = output;
+
+            $("#translation-modal").css("display", "block");
+
+            system_status.stopInterval()
+            $("#modal-system-status").css("display", "none");
         }
 
         function shareMessage(id) {
-            alert("share " + id)
-            // share to a platoform
-            // or alert wdgaf
-        }
-
-        function recordMessage() {
-            // TODO
+            alert("The 'Share' functionality was not implemented as it is out of the scope of this project, but still displayed to get a picture of what the full implemented system would offer.");
         }
     </script>
 

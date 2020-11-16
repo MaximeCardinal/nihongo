@@ -142,3 +142,22 @@
 }
 
 label { pointer-events: none; }
+
+#modal-system-status {
+	display: none;
+	position: absolute;
+	left: calc(50% - 75px);
+	top: calc(50% - 25px);
+	height: 50px;
+	width: 150px; 
+	background-color: grey;
+    border-radius: 5px;
+    color: black;
+    font-size: 20px;
+    text-align: center;
+    padding-top: 10px;
+}
+
+td {
+    vertical-align:top;
+}

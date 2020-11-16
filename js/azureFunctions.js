@@ -1,17 +1,15 @@
-const speechConfig = SpeechSDK.SpeechConfig.fromSubscription("e7868a10ab944f1f9ca2edf5737c2c95", "westus");
+const speechConfig = SpeechSDK.SpeechConfig.fromSubscription(speechCreds, "westus");
 speechConfig.speechRecognitionLanguage = "ja-JP";
 speechConfig.speechSynthesisLanguage = "ja-JP";
 speechConfig.speechSynthesisVoiceName = "ja-JP-HarukaRUS";
-
-var toggle = 0;
 
 function azureSpeechToText() {
     let audioConfig = SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
     let recognizer = new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
     
-    console.log('Speak into your microphone.');
+    //console.log('Speak into your microphone.');
     recognizer.recognizeOnceAsync(result => {
-        console.log(`RECOGNIZED: Text=${result.text}`);
+        //console.log(`RECOGNIZED: Text=${result.text}`);
         transcriptionReceived(result.text);
     });
 }
@@ -44,7 +42,7 @@ function uuidv4() {
 
 function azureTranslate(input, index) {
 
-    var subscriptionKey = "4a6a592e8aae48b5988a1de2f5ff433a";
+    var subscriptionKey = translationCreds;
     var endpoint = "https://api.cognitive.microsofttranslator.com/";
 
     // Add your location, also known as region. The default is global.
