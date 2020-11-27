@@ -73,7 +73,7 @@
     <div class="container-fluid hidden" id='transcript'>
         <div class="d-flex">
             <!-- Transcript -->
-            <div id='transcriptText' class="scroll addBorder" style="width: calc(100% - 250px);">
+            <div id='transcriptText' class="scroll addBorder" style="width: calc(100% - 250px);" v-chat-scroll="{always: false, smooth: true}">
                 <table style="width: 100%; table-layout: auto;">
                     <tbody>
                         <tr v-for="(item, index) in messages" class="transcript-message-row">
@@ -91,6 +91,9 @@
                         </tr>
                     </tbody>
                 </table>
+				<!--<div id="quickScroll">
+					<button id="quickScrollBtn" type="button" class="btn btn-outline-dark btn-sm btn-block"
+				</div>-->
             </div>
             <!-- Right Buttons -->
             <div id='transcriptButtons' class="d-flex flex-column justify-content-center addBorder" style="width: 250px" >
@@ -160,6 +163,7 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="../js/microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue-chat-scroll/dist/vue-chat-scroll.min.js"></script>
     <script src="../js/azureFunctions.js"></script>
     <script src="../js/simulation.js"></script>
 

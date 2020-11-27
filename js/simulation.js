@@ -41,6 +41,12 @@ function simulate() {
                 })
                 last_unique_id++;
                 simulation_iter++;
+				if(transcriptScroll.maxScrollTop - transcriptScroll.scrollTop <= transcriptScroll.offsetHeight) {
+					transcriptScroll.scrollTop = transcriptScroll.scrollHeight
+					console.log("auto scrolled")
+				} else {
+					console.log("didn't scoll")
+				}
             }
         }, 2000);
     }
