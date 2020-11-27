@@ -37,7 +37,7 @@
         <div id="rowOfVideos2" class="d-flex justify-content-center" style="margin-top: 50px">
             <div class="d-flex flex-column videos" style="background-color: black;">
                 <div> 
-                    <label class="d-flex justify-content-center" style="color: white; font-size: 30px; margin-top: 90px" >Shigeru (Host)</label>
+                    <label class="d-flex justify-content-center" style="color: white; font-size: 30px; margin-top: 90px" >You (Participant)</label>
                 </div>
             </div>
             <div class="d-flex flex-column videos">
@@ -90,6 +90,7 @@
                                 <img :id="'narrate-' + index" class="transcript-message-buttons" src="../icons/volume-up.svg" alt="Narrate" width="20px" height="auto" onclick="narrateMessage(this.id)" onmouseover="transcriptMessageButtons_onMouseHover(this)" onmouseout="transcriptMessageButtons_onMouseOut(this)" data-toggle="tooltip" title="Narrate">
                                 <img :id="'translate-' + index" class="transcript-message-buttons" src="../icons/language.svg" alt="Translate" width="30px" height="auto" onclick="translateMessage(this.id)" onmouseover="transcriptMessageButtons_onMouseHover(this)" onmouseout="transcriptMessageButtons_onMouseOut(this)" data-toggle="tooltip" title="Translate">
                                 <img :id="'share-' + index" class="transcript-message-buttons" src="../icons/share-square.svg" alt="Share" width="20px" height="auto" onclick="shareMessage(this.id)" onmouseover="transcriptMessageButtons_onMouseHover(this)" onmouseout="transcriptMessageButtons_onMouseOut(this)" data-toggle="tooltip" title="Share">
+								<img :id="'flag-' + index" class="transcript-message-buttons" src="../icons/flag_empty.png" alt="Flag" width="20px" height="auto" onclick="flagMessage(this.id)" onmouseover="transcriptMessageButtons_onMouseHover(this)" onmouseout="transcriptMessageButtons_onMouseOut(this)" data-toggle="tolltip" title="Flag as incorrect">
                             </td>
                         </tr>
                     </tbody>
@@ -433,11 +434,16 @@
             last_unique_id = last_unique_id + 1;
 			
 			var transcriptText = document.getElementById('transcriptText')
-			if(transcriptText.scrollHeight - transcriptText.scrollTop > transcriptText.clientHeight) {
+			if(transcriptText.scrollHeight - transcriptText.scrollTop > transcriptText.clientHeight && document.hasFocus()) {
 				console.log("not at bottom")
+				console.log("Focused");
 				document.getElementById('quick-scroll-btn').style.visibility = "visible"
 			} else {
 				console.log("at bottom")
+			}
+			
+			if(!document.hasFocus()) {
+				console.log("Not focused");
 			}
 
             system_status.stopInterval()
@@ -479,6 +485,20 @@
         function shareMessage(id) {
             alert("The 'Share' functionality was not implemented as it is out of the scope of this project, but still displayed to get a picture of what the full implemented system would offer.");
         }
+		
+		function flagMessage(id) {
+			var flagIcon = document.getElementById(id);
+			var index = flagIcon.src.lastIndexOf("icons");
+			var flagSrc = "../";
+			var str = flagIcon.src.substring(index);
+			flagSrc = flagSrc + str
+			
+			if(flagSrc == "../icons/flag_empty.png") {
+				flagIcon.src = "../icons/flag_filled.png";
+			} else if(flagSrc == "../icons/flag_filled.png") {
+				flagIcon.src = "../icons/flag_empty.png";
+			}
+		}
     </script>
 
 </body>

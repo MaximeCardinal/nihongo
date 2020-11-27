@@ -43,16 +43,14 @@ function simulate() {
                 simulation_iter++;
 				
 				var transcriptText = document.getElementById('transcriptText')
-				console.log("Scroll Height: " + transcriptText.scrollHeight)
-				console.log("Scroll Top: " + transcriptText.scrollTop)
-				console.log("Client Height: " + transcriptText.clientHeight)
 				var dif = transcriptText.scrollHeight - transcriptText.scrollTop
-				console.log("Dif: " + dif) 
-				if(transcriptText.scrollHeight - transcriptText.scrollTop > transcriptText.clientHeight) {
-					console.log("not at bottom")
+				if(transcriptText.scrollHeight - transcriptText.scrollTop > transcriptText.clientHeight && document.hasFocus()) {
+					console.log("Focused");
 					document.getElementById('quick-scroll-btn').style.visibility = "visible"
-				} else {
-					console.log("at bottom")
+				}
+				
+				if(!document.hasFocus()) {
+					console.log("Not focused");
 				}
             }
         }, 2000);
