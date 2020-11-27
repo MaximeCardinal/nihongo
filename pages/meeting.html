@@ -74,6 +74,9 @@
         <div class="d-flex">
             <!-- Transcript -->
             <div id='transcriptText' class="scroll addBorder" style="width: calc(100% - 250px);" v-chat-scroll="{always: false, smooth: true}">
+				<div id="quickScroll">
+					<button id="quick-scroll-btn" type="button" class="btn btn-outline-dark btn-sm btn-block">New messages. Click here to jump to bottom.</button>
+				</div>
                 <table style="width: 100%; table-layout: auto;">
                     <tbody>
                         <tr v-for="(item, index) in messages" class="transcript-message-row">
@@ -91,9 +94,6 @@
                         </tr>
                     </tbody>
                 </table>
-				<!--<div id="quickScroll">
-					<button id="quickScrollBtn" type="button" class="btn btn-outline-dark btn-sm btn-block"
-				</div>-->
             </div>
             <!-- Right Buttons -->
             <div id='transcriptButtons' class="d-flex flex-column justify-content-center addBorder" style="width: 250px" >
@@ -194,6 +194,12 @@
             });
 
             // End Call Modal
+			document.getElementById('quick-scroll-btn').addEventListener('click', function(e) {
+				var transcriptText = document.getElementById('transcriptText')
+				transcriptText.scrollTop = transcriptText.scrollHeight - transcriptText.clientHeight
+				document.getElementById('quick-scroll-btn').style.visibility = "hidden"
+			});
+			
             document.getElementById('leaveMeeting').addEventListener('click', function (e) {
                 var leaveMeetingModal = document.getElementById('end-call-modal');
                 leaveMeetingModal.style.display = 'block';
@@ -425,6 +431,14 @@
                 timestamp: new Date()
             });
             last_unique_id = last_unique_id + 1;
+			
+			var transcriptText = document.getElementById('transcriptText')
+			if(transcriptText.scrollHeight - transcriptText.scrollTop > transcriptText.clientHeight) {
+				console.log("not at bottom")
+				document.getElementById('quick-scroll-btn').style.visibility = "visible"
+			} else {
+				console.log("at bottom")
+			}
 
             system_status.stopInterval()
             $("#modal-system-status").css("display", "none");

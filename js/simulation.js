@@ -41,15 +41,22 @@ function simulate() {
                 })
                 last_unique_id++;
                 simulation_iter++;
-				if(transcriptScroll.maxScrollTop - transcriptScroll.scrollTop <= transcriptScroll.offsetHeight) {
-					transcriptScroll.scrollTop = transcriptScroll.scrollHeight
-					console.log("auto scrolled")
+				
+				var transcriptText = document.getElementById('transcriptText')
+				console.log("Scroll Height: " + transcriptText.scrollHeight)
+				console.log("Scroll Top: " + transcriptText.scrollTop)
+				console.log("Client Height: " + transcriptText.clientHeight)
+				var dif = transcriptText.scrollHeight - transcriptText.scrollTop
+				console.log("Dif: " + dif) 
+				if(transcriptText.scrollHeight - transcriptText.scrollTop > transcriptText.clientHeight) {
+					console.log("not at bottom")
+					document.getElementById('quick-scroll-btn').style.visibility = "visible"
 				} else {
-					console.log("didn't scoll")
+					console.log("at bottom")
 				}
             }
         }, 2000);
     }
 }
 
-function stopSimulation() {clearInterval(simulation); console.log("Siulation completed.")}
+function stopSimulation() {clearInterval(simulation); console.log("Simulation completed.")}

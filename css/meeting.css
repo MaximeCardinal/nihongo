@@ -129,6 +129,7 @@
     font-size: 20px;
 }
 
+
 #leave-call-button {
     background-color: red;
     color: white;
@@ -156,6 +157,10 @@ label { pointer-events: none; }
     font-size: 20px;
     text-align: center;
     padding-top: 10px;
+}
+
+#quick-scroll-btn {
+	visibility: hidden;
 }
 
 td {
