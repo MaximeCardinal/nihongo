@@ -70,13 +70,13 @@
     </div>
 
     <!-- Transcript Pane -->
+	<div id="quickScroll">
+		<button id="quick-scroll-btn" type="button" class="btn btn-outline-dark btn-sm btn-block">New messages. Click here to jump to bottom.</button>
+	</div>
     <div class="container-fluid hidden" id='transcript'>
         <div class="d-flex">
             <!-- Transcript -->
             <div id='transcriptText' class="scroll addBorder" style="width: calc(100% - 250px);" v-chat-scroll="{always: false, smooth: true}">
-				<div id="quickScroll">
-					<button id="quick-scroll-btn" type="button" class="btn btn-outline-dark btn-sm btn-block">New messages. Click here to jump to bottom.</button>
-				</div>
                 <table style="width: 100%; table-layout: auto;">
                     <tbody>
                         <tr v-for="(item, index) in messages" class="transcript-message-row">
