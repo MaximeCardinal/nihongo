@@ -41,9 +41,15 @@ function simulate() {
                 })
                 last_unique_id++;
                 simulation_iter++;
+				
+				var transcriptText = document.getElementById('transcriptText')
+				var dif = transcriptText.scrollHeight - transcriptText.scrollTop
+				if(transcriptText.scrollHeight - transcriptText.scrollTop > transcriptText.clientHeight && document.hasFocus()) {
+					document.getElementById('quick-scroll-btn').style.visibility = "visible"
+				}
             }
         }, 2000);
     }
 }
 
-function stopSimulation() {clearInterval(simulation); console.log("Siulation completed.")}
+function stopSimulation() {clearInterval(simulation); console.log("Simulation completed.")}

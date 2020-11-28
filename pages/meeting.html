@@ -35,10 +35,9 @@
 
     <div class="container-fluid">
         <div id="rowOfVideos2" class="d-flex justify-content-center" style="margin-top: 50px">
-            <div class="d-flex flex-column videos" style="background-color: black;">
-                <div> 
-                    <label class="d-flex justify-content-center" style="color: white; font-size: 30px; margin-top: 90px" >Shigeru (Host)</label>
-                </div>
+            <div class="d-flex flex-column videos"> 
+				<!--<label class="d-flex justify-content-center" style="color: white; font-size: 30px; margin-top: 90px" >You (Participant)</label>-->
+				<video autoplay="true" id="webcam" margin="auto"></video>
             </div>
             <div class="d-flex flex-column videos">
                 <img src="../images/oliver.gif" class="gifs">
@@ -70,10 +69,13 @@
     </div>
 
     <!-- Transcript Pane -->
+	<div id="quickScroll">
+		<button id="quick-scroll-btn" type="button" class="btn btn-outline-dark btn-sm btn-block">New messages. Click here to jump to bottom.</button>
+	</div>
     <div class="container-fluid hidden" id='transcript'>
         <div class="d-flex">
             <!-- Transcript -->
-            <div id='transcriptText' class="scroll addBorder" style="width: calc(100% - 250px);">
+            <div id='transcriptText' class="scroll addBorder" style="width: calc(100% - 250px);" v-chat-scroll="{always: false, smooth: true}">
                 <table style="width: 100%; table-layout: auto;">
                     <tbody>
                         <tr v-for="(item, index) in messages" class="transcript-message-row">
@@ -87,6 +89,7 @@
                                 <img :id="'narrate-' + index" class="transcript-message-buttons" src="../icons/volume-up.svg" alt="Narrate" width="20px" height="auto" onclick="narrateMessage(this.id)" onmouseover="transcriptMessageButtons_onMouseHover(this)" onmouseout="transcriptMessageButtons_onMouseOut(this)" data-toggle="tooltip" title="Narrate">
                                 <img :id="'translate-' + index" class="transcript-message-buttons" src="../icons/language.svg" alt="Translate" width="30px" height="auto" onclick="translateMessage(this.id)" onmouseover="transcriptMessageButtons_onMouseHover(this)" onmouseout="transcriptMessageButtons_onMouseOut(this)" data-toggle="tooltip" title="Translate">
                                 <img :id="'share-' + index" class="transcript-message-buttons" src="../icons/share-square.svg" alt="Share" width="20px" height="auto" onclick="shareMessage(this.id)" onmouseover="transcriptMessageButtons_onMouseHover(this)" onmouseout="transcriptMessageButtons_onMouseOut(this)" data-toggle="tooltip" title="Share">
+								<img :id="'flag-' + index" class="transcript-message-buttons" src="../icons/flag_empty.png" alt="Flag" width="20px" height="auto" onclick="flagMessage(this.id)" onmouseover="transcriptMessageButtons_onMouseHover(this)" onmouseout="transcriptMessageButtons_onMouseOut(this)" data-toggle="tolltip" title="Flag as incorrect">
                             </td>
                         </tr>
                     </tbody>
@@ -94,9 +97,9 @@
             </div>
             <!-- Right Buttons -->
             <div id='transcriptButtons' class="d-flex flex-column justify-content-center addBorder" style="width: 250px" >
-                <div class="d-flex justify-content-center">
+                <!--<div class="d-flex justify-content-center">
                     <button id='recordVocalButton' class="btn transcript-buttons">Record Vocal Message</button>
-                </div>
+                </div>-->
                 <div class="d-flex justify-content-center">
                     <button id='speechButton' class="btn transcript-buttons" style="margin-top: 10px">Speech Bubbles</button>
                 </div>
@@ -136,6 +139,18 @@
                         <td><b>Japanese: </b></td>
                         <td>{{ input }}</td>
                     </tr>
+					<!--<tr>
+						<td><b>Japanese (Hiragana):</b></td>
+						<td>{{ hiragana }}</td>
+					</tr>
+					<tr>
+						<td><b>Japanese (Katakana):</b></td>
+						<td>{{ katakana }}</td>
+					</tr>
+					<tr>
+						<td><b>Romaji</b></td>
+						<td>{{ romaji }}</td>
+					</tr>-->
                     <tr>
                         <td><b>English: </b></td>
                         <td>{{ output }}</td>
@@ -160,8 +175,11 @@
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="../js/microsoft.cognitiveservices.speech.sdk.bundle.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vue-chat-scroll/dist/vue-chat-scroll.min.js"></script>
     <script src="../js/azureFunctions.js"></script>
     <script src="../js/simulation.js"></script>
+	<!--<script src="../js/kuroshiro.min.js"></script>
+	<script src="../js/kuroshiro-analyzer-kuromoji.min.js"></script>-->
 
     <script>
        window.onload = function() {
@@ -190,6 +208,12 @@
             });
 
             // End Call Modal
+			document.getElementById('quick-scroll-btn').addEventListener('click', function(e) {
+				var transcriptText = document.getElementById('transcriptText')
+				transcriptText.scrollTop = transcriptText.scrollHeight - transcriptText.clientHeight
+				document.getElementById('quick-scroll-btn').style.visibility = "hidden"
+			});
+			
             document.getElementById('leaveMeeting').addEventListener('click', function (e) {
                 var leaveMeetingModal = document.getElementById('end-call-modal');
                 leaveMeetingModal.style.display = 'block';
@@ -273,11 +297,11 @@
                 alert("The 'Open Saved Transcripts' functionality was not implemented as it is out of the scope of this project, but still displayed to get a picture of what the full implemented system would offer.");
             });
 
-            document.getElementById('recordVocalButton').addEventListener('click', function (e) {
+            /*document.getElementById('recordVocalButton').addEventListener('click', function (e) {
                 system_status.recording();
                 $("#modal-system-status").css("display", "block");
                 azureSpeechToText();
-            });
+            });*/
 
             $(".transcript-buttons").hover(
                 function(){
@@ -302,6 +326,10 @@
                     transcript.style.display = 'block';
                     toggle = 1;
                     simulate();
+					
+					recognizer.startContinuousRecognitionAsync();
+					console.log("Recognition starting.");
+					
                 }
                 else{
                     var row2 = document.getElementById('rowOfVideos2');
@@ -315,8 +343,20 @@
                     var transcript = document.getElementById('transcript');
                     transcript.style.display = 'none';
                     toggle = 0;
+					recognizer.stopContinuousRecognitionAsync();
                 }
             });
+			
+			var video = document.querySelector('#webcam');
+			if(navigator.mediaDevices.getUserMedia) {
+				navigator.mediaDevices.getUserMedia({video: true})
+					.then(function (stream) {
+						video.srcObject = stream;
+					})
+					.catch(function (e) {
+						console.log("Error: " + e.errorMessage);
+					});
+			}
         };
 
         function setTranscriptHeight(){
@@ -341,6 +381,28 @@
 
         var toggle = 0;
         var last_unique_id = 0;
+		const recognizer = azureSpeechToTextContinuous();
+		
+		recognizer.recognizing = (s, e) => {
+			//do nothing
+		}
+		
+		recognizer.recognized = (s, e) => {
+			transcriptionReceived(e.result.text);
+		}
+		
+		recognizer.cancelled = (s, e) => {
+			console.log("Recognition cancelled.");
+			console.log(e.reason);
+			console.log(e.errorCode);
+			console.log(e.errorDetails);
+		}
+		
+		recognizer.sessionStopped = (s, e) => {
+			console.log("Stopping recognition.");
+			recognizer.stopContinuousRecognitionAsync();
+		}
+		
 
         // Vue 
         var transcript_content = new Vue({
@@ -405,22 +467,32 @@
             el: '#translation-modal',
             data: {
                 input: "",
-                output: ""
+                output: "",
+				hiragana: "",
+				katakana: "",
+				romaji: ""
             }
         })
 
         // Azure functions
         function transcriptionReceived(content) {
-            
-            transcript_content.messages.push({
+            if(content.length > 0){
+				transcript_content.messages.push({
                 unique_id: last_unique_id + 1,
                 name: "You",
                 role: "participant",
                 content: content,
                 translation: "",
                 timestamp: new Date()
-            });
-            last_unique_id = last_unique_id + 1;
+				});
+				last_unique_id = last_unique_id + 1;
+			}
+            
+			
+			var transcriptText = document.getElementById('transcriptText')
+			if(transcriptText.scrollHeight - transcriptText.scrollTop > transcriptText.clientHeight && document.hasFocus()) {
+				document.getElementById('quick-scroll-btn').style.visibility = "visible"
+			}
 
             system_status.stopInterval()
             $("#modal-system-status").css("display", "none");
@@ -451,6 +523,43 @@
 
             translation.input = input;
             translation.output = output;
+			
+			/*var kuroshiro = new Kuroshiro();
+			kuroshiro.init(new KuromojiAnalyzer())
+				.then(function () {
+					return kuroshiro.convert(hira, {to: "hiragana"});
+				});
+			
+			var hira = input.slice();
+			var kata = hira.slice();
+			var roma = kata.slice();
+			var kuroshiro = new Kuroshiro();
+			kuroshiro.init(new KuromojiAnalyzer())
+				.then(function () {
+					return kuroshiro.convert(hira, {to: "hiragana"});
+				})
+				.then(function(result){
+					console.log(result);
+				})
+				.catch(function(err) {
+					console.log("Error: " + err.message);
+				});
+			
+			kuroshiro = new Kuroshiro();
+			kuroshiro.init(new KuromojiAnalyzer())
+				.then(function () {
+					return kuroshiro.convert(kata, {to: "katakana"});
+				});
+			
+			kuroshiro = new Kuroshiro();
+			kuroshiro.init(new KuromojiAnalyzer())
+				.then(function () {
+					return kuroshiro.convert(roma, {to: "romaji"});
+				});
+			
+			translation.hiragana = hira;
+			//translation.katakana = kata;
+			//translation.romaji = roma;*/
 
             $("#translation-modal").css("display", "block");
 
@@ -461,6 +570,20 @@
         function shareMessage(id) {
             alert("The 'Share' functionality was not implemented as it is out of the scope of this project, but still displayed to get a picture of what the full implemented system would offer.");
         }
+		
+		function flagMessage(id) {
+			var flagIcon = document.getElementById(id);
+			var index = flagIcon.src.lastIndexOf("icons");
+			var flagSrc = "../";
+			var str = flagIcon.src.substring(index);
+			flagSrc = flagSrc + str
+			
+			if(flagSrc == "../icons/flag_empty.png") {
+				flagIcon.src = "../icons/flag_filled.png";
+			} else if(flagSrc == "../icons/flag_filled.png") {
+				flagIcon.src = "../icons/flag_empty.png";
+			}
+		}
     </script>
 
 </body>
