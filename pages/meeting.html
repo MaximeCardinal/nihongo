@@ -466,16 +466,18 @@
 
         // Azure functions
         function transcriptionReceived(content) {
-            
-            transcript_content.messages.push({
+            if(content.length > 0){
+				transcript_content.messages.push({
                 unique_id: last_unique_id + 1,
                 name: "You",
                 role: "participant",
                 content: content,
                 translation: "",
                 timestamp: new Date()
-            });
-            last_unique_id = last_unique_id + 1;
+				});
+				last_unique_id = last_unique_id + 1;
+			}
+            
 			
 			var transcriptText = document.getElementById('transcriptText')
 			if(transcriptText.scrollHeight - transcriptText.scrollTop > transcriptText.clientHeight && document.hasFocus()) {
