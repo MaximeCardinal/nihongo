@@ -181,6 +181,7 @@ label { pointer-events: none; }
 	margin: auto;
 	width: inherit;
 	height: inherit;
+	background-color: black;
 }
 
 td {
