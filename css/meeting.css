@@ -177,6 +177,12 @@ label { pointer-events: none; }
 	visibility: hidden;
 }
 
+#webcam {
+	margin: auto;
+	width: inherit;
+	height: inherit;
+}
+
 td {
     vertical-align:top;
 }

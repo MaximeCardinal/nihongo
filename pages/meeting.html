@@ -35,10 +35,9 @@
 
     <div class="container-fluid">
         <div id="rowOfVideos2" class="d-flex justify-content-center" style="margin-top: 50px">
-            <div class="d-flex flex-column videos" style="background-color: black;">
-                <div> 
-                    <label class="d-flex justify-content-center" style="color: white; font-size: 30px; margin-top: 90px" >You (Participant)</label>
-                </div>
+            <div class="d-flex flex-column videos"> 
+				<!--<label class="d-flex justify-content-center" style="color: white; font-size: 30px; margin-top: 90px" >You (Participant)</label>-->
+				<video autoplay="true" id="webcam" margin="auto"></video>
             </div>
             <div class="d-flex flex-column videos">
                 <img src="../images/oliver.gif" class="gifs">
@@ -347,6 +346,17 @@
 					recognizer.stopContinuousRecognitionAsync();
                 }
             });
+			
+			var video = document.querySelector('#webcam');
+			if(navigator.mediaDevices.getUserMedia) {
+				navigator.mediaDevices.getUserMedia({video: true})
+					.then(function (stream) {
+						video.srcObject = stream;
+					})
+					.catch(function (e) {
+						console.log("Error: " + e.errorMessage);
+					});
+			}
         };
 
         function setTranscriptHeight(){
