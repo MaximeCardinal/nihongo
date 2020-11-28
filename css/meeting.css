@@ -68,7 +68,7 @@
 }
 
 .own-modal {
-    z-index: 1;
+    z-index: 3;
     position: absolute;
     top: 180px;
     border: solid 3px black;
@@ -82,7 +82,7 @@
 }
 
 .translation-modal {
-	z-index: 1;
+	z-index: 3;
     position: absolute;
     top: 180px;
     border: solid 3px black;
