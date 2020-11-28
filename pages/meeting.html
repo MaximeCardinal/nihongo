@@ -24,13 +24,13 @@
     <!-- Content -->
     <div class="container-fluid">
         <div class="d-flex justify-content-center" style="margin-top: 50px">
-            <div class="d-flex flex-column videos">
-                <img src="../images/jacob.gif" class="gifs">
+            <div id="video-Jacob" class="d-flex flex-column videos">
                 <label class="participant-name">Jacob</label>
+                <img src="../images/jacob.gif" class="gifs">
             </div>
-            <div class="d-flex flex-column videos">
+            <div id="video-Maxime" class="d-flex flex-column videos">
+                <label class="participant-name">Maxime</label>
                 <img src="../images/max.gif" class="gifs">
-                <label class="participant-name">Max</label>
             </div>
         </div>
     </div>
@@ -41,9 +41,9 @@
                 <video autoplay="true" id="webcam" margin="auto"></video>
                 <label id="closedCam-you" style="display: none">You</label>
             </div>
-            <div class="d-flex flex-column videos">
-                <img src="../images/oliver.gif" class="gifs">
+            <div id="video-Oliver" class="d-flex flex-column videos">
                 <label class="participant-name">Oliver</label>
+                <img src="../images/oliver.gif" class="gifs">
             </div>
         </div>
     </div>
@@ -161,8 +161,12 @@
                 </tbody>
             </table>
         </div>
-        
     </div>
+
+    <!-- Speech Bubbles -->
+    <div id="speech-bubble-Jacob" class="speech-bubble" style="display: none;"></div>
+    <div id="speech-bubble-Maxime" class="speech-bubble" style="display: none;"></div>
+    <div id="speech-bubble-Oliver" class="speech-bubble" style="display: none;"></div>
 
     <!-- System Status Modal -->
     <div id="modal-system-status">
@@ -189,6 +193,7 @@
         // Global variables
         var micOn = 1;
         var camOn = 0;
+        var bubblesOn = 0;
         var toggle = 0;
         var last_unique_id = 0;
         let continuousRecognizer;
@@ -312,7 +317,13 @@
 
             //Transcript buttons
             document.getElementById('speechButton').addEventListener('click', function (e) {
-                alert("This feature will be implemented in our Beta System");
+                bubblesOn = !bubblesOn;
+                if(bubblesOn == 1) {
+                    setSpeechBubblesPosition();
+                }
+                else {
+                    hideSpeechBubbles();
+                }
             });
 
             document.getElementById('openTranscriptButton').addEventListener('click', function (e) {
@@ -346,8 +357,10 @@
                     setTranscriptHeight();
                     var transcript = document.getElementById('transcript');
                     transcript.style.display = 'block';
+
                     toggle = 1;
                     simulate();
+
 					startMonitoring();
                 }
                 else{
@@ -361,13 +374,46 @@
                     }
                     var transcript = document.getElementById('transcript');
                     transcript.style.display = 'none';
+
                     toggle = 0;
-					stopMonitoring();
+                    stopMonitoring();
+
+                    bubblesOn = 0;
+                    hideSpeechBubbles();
                 }
             });
 			
-			startCamStream();
+            startCamStream();
+            stopMic();
         };
+
+        function setSpeechBubblesPosition() {
+            
+            var participants = ["Jacob", "Maxime", "Oliver"];
+
+            for (var i = 0; i < participants.length; i++) {
+                var vid = document.querySelector("#video-" + participants[i]);
+                var rect =  vid.getBoundingClientRect();
+
+                var speechBubble = document.querySelector("#speech-bubble-" + participants[i]);
+                
+                speechBubble.style.top = (rect.top - 3 + rect.height - 28) + "px";
+                speechBubble.style.left = (rect.left + 5) + "px";
+                speechBubble.style.width = (rect.width - 10) + "px";
+            } 
+        }
+
+        function hideSpeechBubbles() {
+
+            var participants = ["Jacob", "Maxime", "Oliver"];
+
+            for (var i = 0; i < participants.length; i++) {
+
+                var speechBubble = document.querySelector("#speech-bubble-" + participants[i]);
+
+                speechBubble.style.display = "none";
+            }
+        }
 
         function setTranscriptHeight(){
             var rect = document.getElementById("videoButtons").getBoundingClientRect();
@@ -492,7 +538,7 @@
                 messages: [
                     {
                         unique_id: "0",
-                        name: "Shigeru",
+                        name: "Maxime",
                         role: "host",
                         content: "みんなさんこんにちは！",
                         translation: "",

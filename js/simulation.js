@@ -3,22 +3,18 @@ var simulation;
 var simulation_iter = 0;
 var simulation_messages = 
         [
-            {name: "Oliver", role: "participant", content: "こんにちは、しげる先生。"},
-            {name: "Maxime", role: "participant", content: "こんにちは、先生！"},
-            {name: "Jacob", role: "participant", content: "こんにちは。"},
-            {name: "Shigeru", role: "host", content: "お元気ですか？"},
-            {name: "Maxime", role: "participant", content: "元気です！"},
-            {name: "Jacob", role: "participant", content: "僕も元気です！"},
-            {name: "Shigeru", role: "host", content: "オリバーさん、大丈夫ですか？"},
+            {name: "Jacob", role: "participant", content: "こんにちは、マキシム先生。"},
+            {name: "Oliver", role: "participant", content: "こんにちは。"},
+            {name: "Maxime", role: "host", content: "お元気ですか？"},
+            {name: "Jacob", role: "participant", content: "元気です！"},
+            {name: "Maxime", role: "host", content: "オリバーさん、大丈夫ですか？"},
             {name: "Oliver", role: "participant", content: "まあまあ…"},
-            {name: "Shigeru", role: "host", content: "そうですか？　何かあったんですか？"},
+            {name: "Maxime", role: "host", content: "そうですか？　何かあったんですか？"},
             {name: "Oliver", role: "participant", content: "そうですね…　彼女と別れたんです。"},
-            {name: "Maxime", role: "participant", content: "ええ！　本当ですか？　それはひどいですよ！"},
+            {name: "Jacob", role: "participant", content: "ええ！　本当ですか？　それはひどいですよ！"},
             {name: "Jacob", role: "participant", content: "心配しないでオリバーくん、クラスの後でクラブ行きましょうか？　この彼女をわすれたのほうがいいんだろう！"},
-            {name: "Maxime", role: "participant", content: "そうですよ！クラブ一緒に行きましょう！"},
-            {name: "Oliver", role: "participant", content: "はい！　みんなありがとう！"},
-            {name: "Shigeru", role: "host", content: "良かったですね！　じゃあ、クラス始めましょうか。"},
-            {name: "Narrator", role: "?", content: "To be continued..."}
+            {name: "Oliver", role: "participant", content: "はい！　ありがとう！"},
+            {name: "Maxime", role: "host", content: "良かったですね！　じゃあ、クラス始めましょうか。"}
         ]
 
 function simulate() {
@@ -31,16 +27,18 @@ function simulate() {
             }
             else {
                 // last_unique_id are a global var from meeting.html
-                transcript_content.messages.push({
+                var message = {
                     unique_id: last_unique_id + 1,
                     name: simulation_messages[simulation_iter].name,
                     role: simulation_messages[simulation_iter].role,
                     content: simulation_messages[simulation_iter].content,
                     translation: "",
                     timestamp: new Date()
-                })
+                }
+                transcript_content.messages.push(message)
                 last_unique_id++;
                 simulation_iter++;
+                showSpeechBubble(message);
 				
 				var transcriptText = document.getElementById('transcriptText')
 				var dif = transcriptText.scrollHeight - transcriptText.scrollTop
@@ -48,8 +46,22 @@ function simulate() {
 					document.getElementById('quick-scroll-btn').style.visibility = "visible"
 				}
             }
-        }, 2000);
+        }, 3100);
     }
 }
 
 function stopSimulation() {clearInterval(simulation); console.log("Simulation completed.")}
+
+function showSpeechBubble(message) {
+
+    if(bubblesOn == 1) {
+        var speechBubbleId = "#speech-bubble-" + message.name;
+        var speechBubble = document.querySelector(speechBubbleId);
+
+        speechBubble.innerHTML = message.content;
+        speechBubble.style.display = "block";
+
+        //put interval to hide after 2 seconds
+        setTimeout(function () {document.querySelector(speechBubbleId).style.display='none'}, 3000);
+    }
+}
