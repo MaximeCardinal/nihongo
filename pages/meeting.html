@@ -37,7 +37,8 @@
         <div id="rowOfVideos2" class="d-flex justify-content-center" style="margin-top: 50px">
             <div class="d-flex flex-column videos"> 
 				<!--<label class="d-flex justify-content-center" style="color: white; font-size: 30px; margin-top: 90px" >You (Participant)</label>-->
-				<video autoplay="true" id="webcam" margin="auto"></video>
+                <video autoplay="true" id="webcam" margin="auto"></video>
+                <label id="closedCam-you" style="display: none">You</label>
             </div>
             <div class="d-flex flex-column videos">
                 <img src="../images/oliver.gif" class="gifs">
@@ -48,10 +49,10 @@
     <div id="videoButtons" class="container-fluid">
         <div class="d-flex justify-content-center" style="margin-top: 0px">
             <div class="d-flex flex-column justify-content-center meeting-icons">
-                <img id="camera" src="../icons/video.png" alt="videos" width="120%" height="120%" data-toggle="tooltip" title="Toggle Camera">
+                <img id="mic" src="../icons/microphone.svg" alt="microphone" width="auto" height="100%" data-toggle="tooltip" title="Toggle Mic">
             </div>
             <div class="d-flex flex-column justify-content-center meeting-icons">
-                <img id="mute" src="../icons/microphone.svg" alt="microphone" width="auto" height="100%" data-toggle="tooltip" title="Mute">
+                <img id="camera" src="../icons/video.png" alt="videos" width="120%" height="120%" data-toggle="tooltip" title="Toggle Camera">
             </div>
             <div class="d-flex flex-column justify-content-center meeting-icons">
                 <img id="chat" src="../icons/comment.svg" alt="chat" width="100%" height="auto" data-toggle="tooltip" title="Toggle Chat">
@@ -69,10 +70,10 @@
     </div>
 
     <!-- Transcript Pane -->
-	<div id="quickScroll">
-		<button id="quick-scroll-btn" type="button" class="btn btn-outline-dark btn-sm btn-block">New messages. Click here to jump to bottom.</button>
-	</div>
     <div class="container-fluid hidden" id='transcript'>
+        <div id="quickScroll">
+            <button id="quick-scroll-btn" type="button" class="btn btn-outline-dark btn-sm btn-block">New messages. Click here to jump to bottom.</button>
+        </div>
         <div class="d-flex">
             <!-- Transcript -->
             <div id='transcriptText' class="scroll addBorder" style="width: calc(100% - 250px);" v-chat-scroll="{always: false, smooth: true}">
@@ -182,7 +183,16 @@
 	<script src="../js/kuroshiro-analyzer-kuromoji.min.js"></script>-->
 
     <script>
-       window.onload = function() {
+
+        // Global variables
+        var micOn = 1;
+        var camOn = 0;
+        var toggle = 0;
+        var last_unique_id = 0;
+        let continuousRecognizer;
+
+
+        window.onload = function() {
             //Go home
             $('.nav-home').click(function() {
                 var leaveMeetingModal = document.getElementById('end-call-modal');
@@ -272,12 +282,22 @@
                     $(this).css({"cursor": "default", "opacity": "1"});
             });
 
-            document.getElementById('camera').addEventListener('click', function (e) {
-                alert("The 'Camera Settings' functionality was not implemented as it is out of the scope of this project, but still displayed to get a picture of what the full implemented system would offer.");
+            document.getElementById('mic').addEventListener('click', function (e) {
+                if(micOn == 0) {
+                    startMic();
+                }
+                else {
+                    stopMic();
+                }
             });
 
-            document.getElementById('mute').addEventListener('click', function (e) {
-                alert("The 'Microphone Settings' functionality was not implemented as it is out of the scope of this project, but still displayed to get a picture of what the full implemented system would offer.");
+            document.getElementById('camera').addEventListener('click', function (e) {                
+                if(camOn == 0) {
+                    startCamStream();
+                }
+                else {
+                    closeCamStream();
+                }
             });
 
             document.getElementById('shareScreen').addEventListener('click', function (e) {
@@ -326,10 +346,7 @@
                     transcript.style.display = 'block';
                     toggle = 1;
                     simulate();
-					
-					recognizer.startContinuousRecognitionAsync();
-					console.log("Recognition starting.");
-					
+					startMonitoring();
                 }
                 else{
                     var row2 = document.getElementById('rowOfVideos2');
@@ -343,20 +360,11 @@
                     var transcript = document.getElementById('transcript');
                     transcript.style.display = 'none';
                     toggle = 0;
-					recognizer.stopContinuousRecognitionAsync();
+					stopMonitoring();
                 }
             });
 			
-			var video = document.querySelector('#webcam');
-			if(navigator.mediaDevices.getUserMedia) {
-				navigator.mediaDevices.getUserMedia({video: true})
-					.then(function (stream) {
-						video.srcObject = stream;
-					})
-					.catch(function (e) {
-						console.log("Error: " + e.errorMessage);
-					});
-			}
+			startCamStream();
         };
 
         function setTranscriptHeight(){
@@ -368,8 +376,8 @@
                 height = 100;
             }
 
-            $("#transcriptText").css({"top": top, "height": height});
-            $("#transcriptButtons").css({"top": top, "height": height});
+            $("#transcriptText").css({"top": top - 31, "height": height - 31});
+            $("#transcriptButtons").css({"top": top - 31, "height": height - 31});
         }
 
         function transcriptMessageButtons_onMouseHover(elem) {
@@ -379,29 +387,97 @@
             $(elem).css({"cursor": "default", "opacity": "1"});
         }
 
-        var toggle = 0;
-        var last_unique_id = 0;
-		const recognizer = azureSpeechToTextContinuous();
+        function startMic() {
+            var icon = document.querySelector('#mic');
+            icon.src = "../icons/microphone.svg";
+
+            micOn = 1;
+            startMonitoring();
+        }
+
+        function stopMic() {
+
+            var icon = document.querySelector('#mic');
+            icon.src = "../icons/microphone_off.png";
+
+            micOn = 0;
+            stopMonitoring();
+        }
+
+        function startMonitoring() {
+            if (micOn == 1 && toggle == 1) {
+                continuousRecognizer = azureSpeechToTextContinuous();
+
+                continuousRecognizer.recognized = (s, e) => {
+                    transcriptionReceived(e.result.text);
+                }
+
+                continuousRecognizer.startContinuousRecognitionAsync();
+				console.log("Recognition starting.");
+            }
+        }
+
+        function stopMonitoring() {
+            if (continuousRecognizer) {
+                if (micOn == 0 || toggle == 0) {
+                    continuousRecognizer.stopContinuousRecognitionAsync();
+                    console.log("Stopping recognition.");
+                }
+            }
+        }
+
+        function startCamStream() {
+
+            var placeHolder = document.querySelector('#closedCam-you');
+            placeHolder.style = "display: none;"
+
+            var video = document.querySelector('#webcam');
+			if(navigator.mediaDevices.getUserMedia) {
+				navigator.mediaDevices.getUserMedia({video: true})
+					.then(function (stream) {
+                        video.srcObject = stream;
+                        video.style = "display: block";
+
+                        var icon = document.querySelector('#camera');
+                        icon.src = "../icons/video.png";
+
+                        camOn = 1;
+					})
+					.catch(function (e) {
+                        console.log("Error: " + e.errorMessage);
+                        closeCamStream();
+					});
+			}
+        }
+
+        function closeCamStream() {
+            var video = document.querySelector('#webcam');
+            video.srcObject = null;
+            video.style = "display: none;";
+
+            var placeHolder = document.querySelector('#closedCam-you');
+            placeHolder.style = "display: block;"
+
+            var icon = document.querySelector('#camera');
+            icon.src = "../icons/video_off.png";
+            camOn = 0;
+        }
 		
-		recognizer.recognizing = (s, e) => {
+		/*continuousRecognizer.recognizing = (s, e) => {
 			//do nothing
-		}
+		}*/
 		
-		recognizer.recognized = (s, e) => {
-			transcriptionReceived(e.result.text);
-		}
-		
-		recognizer.cancelled = (s, e) => {
+		/*continuousRecognizer.cancelled = (s, e) => {
 			console.log("Recognition cancelled.");
 			console.log(e.reason);
 			console.log(e.errorCode);
 			console.log(e.errorDetails);
-		}
+		}*/
 		
-		recognizer.sessionStopped = (s, e) => {
+		/*recognizer.sessionStopped = (s, e) => {
 			console.log("Stopping recognition.");
 			recognizer.stopContinuousRecognitionAsync();
-		}
+		}*/
 		
 
         // Vue 
@@ -487,7 +563,6 @@
 				});
 				last_unique_id = last_unique_id + 1;
 			}
-            
 			
 			var transcriptText = document.getElementById('transcriptText')
 			if(transcriptText.scrollHeight - transcriptText.scrollTop > transcriptText.clientHeight && document.hasFocus()) {
