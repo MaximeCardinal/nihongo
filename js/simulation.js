@@ -45,12 +45,7 @@ function simulate() {
 				var transcriptText = document.getElementById('transcriptText')
 				var dif = transcriptText.scrollHeight - transcriptText.scrollTop
 				if(transcriptText.scrollHeight - transcriptText.scrollTop > transcriptText.clientHeight && document.hasFocus()) {
-					console.log("Focused");
 					document.getElementById('quick-scroll-btn').style.visibility = "visible"
-				}
-				
-				if(!document.hasFocus()) {
-					console.log("Not focused");
 				}
             }
         }, 2000);

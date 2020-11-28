@@ -98,9 +98,9 @@
             </div>
             <!-- Right Buttons -->
             <div id='transcriptButtons' class="d-flex flex-column justify-content-center addBorder" style="width: 250px" >
-                <div class="d-flex justify-content-center">
+                <!--<div class="d-flex justify-content-center">
                     <button id='recordVocalButton' class="btn transcript-buttons">Record Vocal Message</button>
-                </div>
+                </div>-->
                 <div class="d-flex justify-content-center">
                     <button id='speechButton' class="btn transcript-buttons" style="margin-top: 10px">Speech Bubbles</button>
                 </div>
@@ -140,6 +140,18 @@
                         <td><b>Japanese: </b></td>
                         <td>{{ input }}</td>
                     </tr>
+					<!--<tr>
+						<td><b>Japanese (Hiragana):</b></td>
+						<td>{{ hiragana }}</td>
+					</tr>
+					<tr>
+						<td><b>Japanese (Katakana):</b></td>
+						<td>{{ katakana }}</td>
+					</tr>
+					<tr>
+						<td><b>Romaji</b></td>
+						<td>{{ romaji }}</td>
+					</tr>-->
                     <tr>
                         <td><b>English: </b></td>
                         <td>{{ output }}</td>
@@ -167,6 +179,8 @@
 	<script src="https://cdn.jsdelivr.net/npm/vue-chat-scroll/dist/vue-chat-scroll.min.js"></script>
     <script src="../js/azureFunctions.js"></script>
     <script src="../js/simulation.js"></script>
+	<!--<script src="../js/kuroshiro.min.js"></script>
+	<script src="../js/kuroshiro-analyzer-kuromoji.min.js"></script>-->
 
     <script>
        window.onload = function() {
@@ -284,11 +298,11 @@
                 alert("The 'Open Saved Transcripts' functionality was not implemented as it is out of the scope of this project, but still displayed to get a picture of what the full implemented system would offer.");
             });
 
-            document.getElementById('recordVocalButton').addEventListener('click', function (e) {
+            /*document.getElementById('recordVocalButton').addEventListener('click', function (e) {
                 system_status.recording();
                 $("#modal-system-status").css("display", "block");
                 azureSpeechToText();
-            });
+            });*/
 
             $(".transcript-buttons").hover(
                 function(){
@@ -313,6 +327,10 @@
                     transcript.style.display = 'block';
                     toggle = 1;
                     simulate();
+					
+					recognizer.startContinuousRecognitionAsync();
+					console.log("Recognition starting.");
+					
                 }
                 else{
                     var row2 = document.getElementById('rowOfVideos2');
@@ -326,6 +344,7 @@
                     var transcript = document.getElementById('transcript');
                     transcript.style.display = 'none';
                     toggle = 0;
+					recognizer.stopContinuousRecognitionAsync();
                 }
             });
         };
@@ -352,6 +371,28 @@
 
         var toggle = 0;
         var last_unique_id = 0;
+		const recognizer = azureSpeechToTextContinuous();
+		
+		recognizer.recognizing = (s, e) => {
+			//do nothing
+		}
+		
+		recognizer.recognized = (s, e) => {
+			transcriptionReceived(e.result.text);
+		}
+		
+		recognizer.cancelled = (s, e) => {
+			console.log("Recognition cancelled.");
+			console.log(e.reason);
+			console.log(e.errorCode);
+			console.log(e.errorDetails);
+		}
+		
+		recognizer.sessionStopped = (s, e) => {
+			console.log("Stopping recognition.");
+			recognizer.stopContinuousRecognitionAsync();
+		}
+		
 
         // Vue 
         var transcript_content = new Vue({
@@ -416,7 +457,10 @@
             el: '#translation-modal',
             data: {
                 input: "",
-                output: ""
+                output: "",
+				hiragana: "",
+				katakana: "",
+				romaji: ""
             }
         })
 
@@ -435,15 +479,7 @@
 			
 			var transcriptText = document.getElementById('transcriptText')
 			if(transcriptText.scrollHeight - transcriptText.scrollTop > transcriptText.clientHeight && document.hasFocus()) {
-				console.log("not at bottom")
-				console.log("Focused");
 				document.getElementById('quick-scroll-btn').style.visibility = "visible"
-			} else {
-				console.log("at bottom")
-			}
-			
-			if(!document.hasFocus()) {
-				console.log("Not focused");
 			}
 
             system_status.stopInterval()
@@ -475,6 +511,43 @@
 
             translation.input = input;
             translation.output = output;
+			
+			/*var kuroshiro = new Kuroshiro();
+			kuroshiro.init(new KuromojiAnalyzer())
+				.then(function () {
+					return kuroshiro.convert(hira, {to: "hiragana"});
+				});
+			
+			var hira = input.slice();
+			var kata = hira.slice();
+			var roma = kata.slice();
+			var kuroshiro = new Kuroshiro();
+			kuroshiro.init(new KuromojiAnalyzer())
+				.then(function () {
+					return kuroshiro.convert(hira, {to: "hiragana"});
+				})
+				.then(function(result){
+					console.log(result);
+				})
+				.catch(function(err) {
+					console.log("Error: " + err.message);
+				});
+			
+			kuroshiro = new Kuroshiro();
+			kuroshiro.init(new KuromojiAnalyzer())
+				.then(function () {
+					return kuroshiro.convert(kata, {to: "katakana"});
+				});
+			
+			kuroshiro = new Kuroshiro();
+			kuroshiro.init(new KuromojiAnalyzer())
+				.then(function () {
+					return kuroshiro.convert(roma, {to: "romaji"});
+				});
+			
+			translation.hiragana = hira;
+			//translation.katakana = kata;
+			//translation.romaji = roma;*/
 
             $("#translation-modal").css("display", "block");
 

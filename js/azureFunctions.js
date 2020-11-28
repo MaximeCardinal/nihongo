@@ -14,6 +14,11 @@ function azureSpeechToText() {
     });
 }
 
+function azureSpeechToTextContinuous() {
+    let audioConfig = SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
+     return new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
+}
+
 function synthesizeSpeech(input) {
     const audioConfig = SpeechSDK.AudioConfig.fromDefaultSpeakerOutput();
 
